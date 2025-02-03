@@ -1,0 +1,43 @@
+{
+  "name": "sunday",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:api": "cd api && npm run start:dev",
+    "start:frontend": "cd frontend && ng serve",
+    "start:all": "concurrently 'npm run start:api' 'npm run start:frontend'",
+    "lint": "eslint **/*.ts",
+    "format": "prettier --write **/*.{ts,html,scss}"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brYordanov/sunday.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brYordanov/sunday/issues"
+  },
+  "homepage": "https://github.com/brYordanov/sunday#readme",
+  "dependencies": {
+    "rxjs": "~7.8.0"
+  },
+  "devDependencies": {
+    "@angular-eslint/eslint-plugin": "^19.0.2",
+    "@angular-eslint/eslint-plugin-template": "^19.0.2",
+    "@angular-eslint/template-parser": "^19.0.2",
+    "@typescript-eslint/eslint-plugin": "^8.23.0",
+    "@typescript-eslint/parser": "^8.23.0",
+    "concurrently": "^9.1.2",
+    "eslint": "^9.19.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jest": "^28.11.0",
+    "eslint-plugin-prettier": "^5.2.3",
+    "eslint-plugin-unused-imports": "^4.1.4",
+    "prettier": "^3.4.2",
+    "typescript": "^5.1.3"
+  }
+}
