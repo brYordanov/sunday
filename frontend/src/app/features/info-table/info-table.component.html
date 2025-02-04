@@ -1,0 +1,34 @@
+<table
+  mat-table
+  *ngIf="info | async as tableData"
+  [dataSource]="tableData"
+  class="mat-elevation-z8"
+>
+  <ng-container matColumnDef="symbol">
+    <th mat-header-cell *matHeaderCellDef>Symbol</th>
+    <td mat-cell *matCellDef="let element">{{ element.symbol }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="newestRecordDate">
+    <th mat-header-cell *matHeaderCellDef>newestRecordDate</th>
+    <td mat-cell *matCellDef="let element">{{ element.newestRecordDate }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="oldestRecordDate">
+    <th mat-header-cell *matHeaderCellDef>oldestRecordDate</th>
+    <td mat-cell *matCellDef="let element">{{ element.oldestRecordDate }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="termAnalysis">
+    <th mat-header-cell *matHeaderCellDef>termAnalysis</th>
+    <td mat-cell *matCellDef="let element">some</td>
+  </ng-container>
+
+  <ng-container matColumnDef="termPredictability">
+    <th mat-header-cell *matHeaderCellDef>termPredictability</th>
+    <td mat-cell *matCellDef="let element">other</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>
