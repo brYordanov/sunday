@@ -21,3 +21,11 @@ export type TermAnalysis = {
 export type TermPredictability = {
   [K in TermTypes]: boolean;
 };
+
+export type StockQueryParams = {
+  id?: number;
+  symbol?: string;
+  createdAfter?: string;
+  createdBefore?: string;
+  order?: 'ASC' | 'DESC';
+};

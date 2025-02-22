@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 
-import { dataPerMonth, Term, TermTypes } from './stock.types';
+import { dataPerMonth, StockQueryParams, Term, TermTypes } from './stock.types';
 import { CacheService } from 'src/modules/cache/cache.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Stock } from './entities/stock.entity';
@@ -54,5 +54,25 @@ export class StocksService {
       `https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=${symbol}&apikey=${this.apiKey}`,
     );
     return response.data;
+  }
+
+  async getStock(params: StockQueryParams): Promise<Stock[]> {
+    const query = this.stockRepository.createQueryBuilder('stock');
+
+    Object.entries(params).forEach(([key, value]) => {
+      if (!value) return;
+
+      if (key === 'order') {
+        query.orderBy('stock.createdAt', value as 'ASC' | 'DESC');
+      } else if (key === 'createdAfter') {
+        query.andWhere(`stock.createdAt > :${key}`, { [key]: value });
+      } else if (key === 'createdBefore') {
+        query.andWhere(`stock.createdAt < :${key}`, { [key]: value });
+      } else {
+        query.andWhere(`stock.${key} = :${key}`, { [key]: value });
+      }
+    });
+
+    return query.getMany();
   }
 }
