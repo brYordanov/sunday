@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { StocksService } from './stocks.service';
 
@@ -9,11 +9,11 @@ export class StocksController {
     private readonly configService: ConfigService,
     private readonly stockService: StocksService,
   ) {
-    this.apiKey = this.configService.get<string>('API_KEY') ?? '';
+    this.apiKey = this.configService.get<string>('STOCK_DATA_API_KEY') ?? '';
   }
 
-  @Get()
-  getStockData() {
-    return this.stockService.getStockData();
+  @Post()
+  registerStock(@Body('stockSymbol') stockSymbol: string) {
+    return this.stockService.processStock(stockSymbol);
   }
 }

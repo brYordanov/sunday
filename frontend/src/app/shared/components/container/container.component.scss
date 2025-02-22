@@ -1,0 +1,15 @@
+@use '../../../../mixins/container.scss' as *;
+
+$container-breakpoints: (
+  smallest: 100%,
+  480px: 440px,
+  768px: 720px,
+  1024px: 960px,
+  1200px: 1140px,
+  1400px: 1280px,
+  1600px: 1440px,
+);
+
+.container {
+  @include container($container-breakpoints);
+}

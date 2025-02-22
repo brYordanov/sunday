@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { InfoTableComponent } from './features/info-table/info-table.component';
+import { StocksComponent } from './features/stocks/stocks.component';
 
 export const routes: Routes = [
-    {
-        path: '',
-        component: InfoTableComponent,
-        pathMatch: 'full'
-    }
+  {
+    path: '',
+    component: StocksComponent,
+    pathMatch: 'full',
+  },
 ];
