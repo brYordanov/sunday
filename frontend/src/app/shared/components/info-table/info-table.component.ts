@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
-import { InfoTableService } from './info-table.service';
+import { Component, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
+import { Column } from './info-table.types';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-info-table',
@@ -10,13 +11,9 @@ import { MatTableModule } from '@angular/material/table';
   styleUrl: './info-table.component.scss',
 })
 export class InfoTableComponent {
-  infoTableService = inject(InfoTableService);
-  displayedColumns: string[] = [
-    'symbol',
-    'newestRecordDate',
-    'oldestRecordDate',
-    'termAnalysis',
-    'termPredictability',
-  ];
-  info = this.infoTableService.getInfo();
+  @Input() data$!: Observable<any[]>;
+  @Input() columns: Column[] = [];
+  get displayedColumns(): string[] {
+    return this.columns.map((col) => col.name);
+  }
 }
