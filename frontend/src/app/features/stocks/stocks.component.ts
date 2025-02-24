@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { StockService } from './stocks.service';
 import { CommonModule } from '@angular/common';
-import { shareReplay } from 'rxjs';
+import { shareReplay, tap } from 'rxjs';
 import { Column } from '../../shared/components/info-table/info-table.types';
 import { InfoTableComponent } from '../../shared/components/info-table/info-table.component';
 
@@ -54,14 +54,24 @@ export class StocksComponent {
     stockSymbol: new FormControl('', { nonNullable: true, validators: Validators.required }),
   });
 
-  stocksData = this.stockService.getStocks().pipe(shareReplay());
+  stocksData = this.stockService.stocks$;
 
   onSubmit() {
     if (this.stockRegisterForm.valid) {
       const stockSymbol = this.stockRegisterForm.value.stockSymbol!;
-      console.log({ stockSymbol });
-
-      this.stockService.registerStock({ stockSymbol }).subscribe();
+      this.stockService
+        .registerStock({ stockSymbol })
+        .pipe(
+          tap(() => {
+            this.stockService.refreshStocks();
+            this.stockRegisterForm.reset();
+            this.stockRegisterForm.reset({ stockSymbol: '' });
+            this.stockRegisterForm.markAsPristine();
+            this.stockRegisterForm.markAsUntouched();
+            this.stockRegisterForm.controls.stockSymbol.updateValueAndValidity();
+          })
+        )
+        .subscribe();
     }
   }
 }

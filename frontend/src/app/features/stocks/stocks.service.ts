@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, shareReplay, switchMap } from 'rxjs';
 import { API_URL } from '../../../../env';
 import { registerStockPayload } from './stocks.types';
 
@@ -10,11 +10,18 @@ import { registerStockPayload } from './stocks.types';
 export class StockService {
   constructor(private http: HttpClient) {}
 
+  private refresh$ = new BehaviorSubject<void>(undefined);
+
+  stocks$ = this.refresh$.pipe(
+    switchMap(() => this.http.get<any>(`${API_URL}/stocks`)),
+    shareReplay()
+  );
+
   registerStock(payload: registerStockPayload): Observable<any> {
     return this.http.post<any>(`${API_URL}/stocks`, payload);
   }
 
-  getStocks() {
-    return this.http.get<any>(`${API_URL}/stocks`);
+  refreshStocks() {
+    this.refresh$.next();
   }
 }
