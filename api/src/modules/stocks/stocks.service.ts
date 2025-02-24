@@ -1,13 +1,12 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 
-import { dataPerMonth, StockQueryParams, Term, TermTypes } from './stock.types';
+import { StockQueryParams } from './stock.types';
 import { CacheService } from 'src/modules/cache/cache.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Stock } from './entities/stock.entity';
 import { Repository } from 'typeorm';
 import { createBody } from './stock.calculations';
-import { map } from 'rxjs';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
