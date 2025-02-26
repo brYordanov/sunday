@@ -4,9 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start:be-local": "concurrently 'docker-compose --env-file ./api/.env.local -f docker-compose.local.yaml up --build' 'cd api && npm run start:dev'",
+    "start:be-docker": "docker-compose --env-file ./api/.env.docker -f docker-compose.yaml up --build",
+    "start:db": "docker-compose --env-file ./api/.env.local -f docker-compose.local.yaml up --build",
     "start:api": "cd api && npm run start:dev",
     "start:frontend": "cd frontend && ng serve",
-    "start:all": "concurrently 'npm run start:api' 'npm run start:frontend'",
+    "start:all": "concurrently 'npm run be:docker' 'npm run start:frontend'",
     "lint": "eslint **/*.ts",
     "format": "prettier --write **/*.{ts,html,scss}"
   },
@@ -21,10 +24,6 @@
     "url": "https://github.com/brYordanov/sunday/issues"
   },
   "homepage": "https://github.com/brYordanov/sunday#readme",
-  "dependencies": {
-    "dotenv": "^16.4.7",
-    "rxjs": "~7.8.0"
-  },
   "devDependencies": {
     "concurrently": "^9.1.2"
   }

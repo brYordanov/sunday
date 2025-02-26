@@ -12,7 +12,9 @@ import { StockSymbolsModule } from './modules/stock-symbols/stock-symbols.module
 @Module({
   imports: [
     StocksModule,
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      envFilePath: `.env.${process.env.NODE_ENV || 'local'}`,
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
