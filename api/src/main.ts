@@ -3,7 +3,8 @@ import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 
-dotenv.config();
+const envFile = process.env.NODE_ENV === 'production' ? '.env.docker' : '.env.local';
+dotenv.config({ path: envFile });
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,7 +16,10 @@ async function bootstrap() {
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
   };
 
-  app.enableCors(corsOptions);
+  console.log(process.env.PORT);
+  
+
+  app.enableCors(corsOptions);  
 
   await app.listen(process.env.PORT ?? 3000);
 }

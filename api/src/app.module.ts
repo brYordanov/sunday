@@ -14,6 +14,7 @@ import { StockSymbolsModule } from './modules/stock-symbols/stock-symbols.module
     StocksModule,
     ConfigModule.forRoot({
       envFilePath: `.env.${process.env.NODE_ENV || 'local'}`,
+      isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
