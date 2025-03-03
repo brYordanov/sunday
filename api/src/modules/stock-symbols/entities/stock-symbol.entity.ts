@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity({name: 'stock-symbol'})
-export class Symbol {
+export class StockSymbol {
     @PrimaryColumn()
     symbol: string
 

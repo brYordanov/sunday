@@ -19,7 +19,7 @@ export class StocksService {
     private readonly cacheService: CacheService,
     private configService: ConfigService,
   ) {
-    this.apiKey = this.configService.get<string>('STOCK_DATA_API_KEY');
+    this.apiKey = this.configService.get<string>('ALPHA_VANTAGE_API_KEY');
   }
 
   async processStock(stockSymbol) {
