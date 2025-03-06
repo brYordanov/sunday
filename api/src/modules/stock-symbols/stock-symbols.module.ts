@@ -2,17 +2,17 @@ import { Module } from '@nestjs/common';
 import { StockSymbolsController } from './stock-symbols.controller';
 import { StockSymbolsService } from './stock-symbols.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Symbol } from './entities/stock-symbol.entity';
 import { HttpModule } from '@nestjs/axios';
+import { StockSymbol } from './stock-symbol.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Symbol]),
+    TypeOrmModule.forFeature([StockSymbol]),
     HttpModule.register({
-      baseURL: 'https://financialmodelingprep.com/'
-    })
+      baseURL: 'https://financialmodelingprep.com/',
+    }),
   ],
   controllers: [StockSymbolsController],
-  providers: [StockSymbolsService]
+  providers: [StockSymbolsService],
 })
 export class StockSymbolsModule {}

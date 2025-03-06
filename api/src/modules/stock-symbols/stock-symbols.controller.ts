@@ -5,27 +5,8 @@ import { StockSymbolsService } from './stock-symbols.service';
 export class StockSymbolsController {
   constructor(private readonly stockSymbolSrvice: StockSymbolsService) {}
 
-  @Post()
+  @Post('populate')
   async registerAllStockSymbols() {
-    return this.stockSymbolSrvice.registerAllStockSymbols(data);
+    return this.stockSymbolSrvice.populateTable();
   }
 }
-
-var data = [  
-  {
-    symbol: 'NOVC',
-    name: 'Novation Companies, Inc.',
-    price: 0.01,
-    exchange: 'Other OTC',
-    exchangeShortName: 'PNK',
-    type: 'stock',
-  },
-  {
-    symbol: 'L0CK.F',
-    name: 'iShares Digital Security UCITS ETF',
-    price: 6.221,
-    exchange: 'Frankfurt Stock Exchange',
-    exchangeShortName: 'XETRA',
-    type: 'etf',
-  },
-];

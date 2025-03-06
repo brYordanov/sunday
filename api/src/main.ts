@@ -16,10 +16,7 @@ async function bootstrap() {
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
   };
 
-  console.log(process.env.PORT);
-  
-
-  app.enableCors(corsOptions);  
+  app.enableCors(corsOptions);
 
   await app.listen(process.env.PORT ?? 3000);
 }

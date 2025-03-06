@@ -1,31 +1,81 @@
-import { Injectable } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { StockSymbol } from './entities/stock-symbol.entity';
+import { StockSymbol } from './stock-symbol.entity';
+import { Response, SymbolExternalApi } from './stock-symbol.types';
 
 @Injectable()
 export class StockSymbolsService {
-    private readonly apiKey: string
-    constructor(
-        @InjectRepository(StockSymbol)
-        private readonly stockSymbolRepository: Repository<StockSymbol>,
-        private readonly configService: ConfigService) {
-        this.apiKey = this.configService.get<string>('FINANCIAL_MODALING_PREP_API_KEY')
+  private readonly apiKey: string;
+  constructor(
+    @InjectRepository(StockSymbol)
+    private readonly stockSymbolRepository: Repository<StockSymbol>,
+    private readonly configService: ConfigService,
+    private readonly httpService: HttpService,
+  ) {
+    this.apiKey = this.configService.get<string>('FINANCIAL_MODALING_PREP_API_KEY');
+  }
+
+  async populateTable(): Promise<Response> {
+    if (await this.isTablePopulated()) {
+      return {
+        message: 'Table already populated',
+      };
     }
 
+    const symbols = await this.getDataFromExternalApi();
 
-    registerAllStockSymbols(symbols: any[]): StockSymbol[] {
-        const symbolEntities = symbols.map((item) => {
-            return this.stockSymbolRepository.create({
-              symbol: item.symbol,
-              name: item.name,
-              exchangeName: item.exchange,
-              exchangeShortName: item.exchangeShortName,
-              type: item.type,
-            });
-          });
+    const symbolEntities = symbols.map((item) => {
+      return this.stockSymbolRepository.create({
+        symbol: item.symbol,
+        name: item.name,
+        exchangeName: item.exchange,
+        exchangeShortName: item.exchangeShortName,
+        type: item.type,
+      });
+    });
 
-          return symbolEntities
+    const batchSize = 500;
+    const savedEntities: StockSymbol[] = [];
+
+    for (let i = 0; i < symbolEntities.length; i += batchSize) {
+      const batch = symbolEntities.slice(i, i + batchSize);
+      const savedBatch = await this.stockSymbolRepository.save(batch);
+      savedEntities.push(...savedBatch);
     }
+
+    return {
+      message: 'successfully populated',
+      data: savedEntities,
+    };
+  }
+  // async getDataFromExternalApi(): Promise<SymbolExternalApi[]> {
+  //   try {
+  //     const response = await this.httpService.axiosRef.get<SymbolExternalApi[]>(
+  //       `https://financialmodelingprep.com/api/v3/stock/list?apikey=${this.apiKey}`,
+  //     );
+  //     return response.data;
+  //   } catch (err) {
+  //     throw new BadRequestException();
+  //   }
+  // }
+
+  async isTablePopulated(): Promise<boolean> {
+    const count = await this.stockSymbolRepository.count();
+
+    return count > 1000;
+  }
+
+  async getDataFromExternalApi(): Promise<SymbolExternalApi[]> {
+    try {
+      const response = await this.httpService.axiosRef.get<SymbolExternalApi[]>(
+        `http://localhost:8000/ajax/test-data.json`,
+      );
+      return response.data;
+    } catch (err) {
+      throw new BadRequestException();
+    }
+  }
 }

@@ -4,6 +4,7 @@
 *build
 *.env.*
 postgres_data/
+*dump.sql
 
 
 # Logs
