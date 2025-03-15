@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { StockSymbol } from './stock-symbol.entity';
-import { Response, SymbolExternalApi } from './stock-symbol.types';
+import { QueryParams, Response, SymbolExternalApi } from './stock-symbol.types';
 
 @Injectable()
 export class StockSymbolsService {
@@ -18,9 +18,14 @@ export class StockSymbolsService {
     this.apiKey = this.configService.get<string>('FINANCIAL_MODALING_PREP_API_KEY');
   }
 
+  async getSymbols(params: QueryParams) {
+    return params
+  }
+
   async populateTable(): Promise<Response> {
     if (await this.isTablePopulated()) {
       return {
+        statusCode: 200,
         message: 'Table already populated',
       };
     }
@@ -47,35 +52,24 @@ export class StockSymbolsService {
     }
 
     return {
+      statusCode: 200,
       message: 'successfully populated',
       data: savedEntities,
     };
   }
-  // async getDataFromExternalApi(): Promise<SymbolExternalApi[]> {
-  //   try {
-  //     const response = await this.httpService.axiosRef.get<SymbolExternalApi[]>(
-  //       `https://financialmodelingprep.com/api/v3/stock/list?apikey=${this.apiKey}`,
-  //     );
-  //     return response.data;
-  //   } catch (err) {
-  //     throw new BadRequestException();
-  //   }
-  // }
-
-  async isTablePopulated(): Promise<boolean> {
-    const count = await this.stockSymbolRepository.count();
-
-    return count > 1000;
-  }
-
   async getDataFromExternalApi(): Promise<SymbolExternalApi[]> {
     try {
       const response = await this.httpService.axiosRef.get<SymbolExternalApi[]>(
-        `http://localhost:8000/ajax/test-data.json`,
+        `https://financialmodelingprep.com/api/v3/stock/list?apikey=${this.apiKey}`,
       );
       return response.data;
     } catch (err) {
       throw new BadRequestException();
     }
+  }
+
+  async isTablePopulated(): Promise<boolean> {
+    const count = await this.stockSymbolRepository.count();
+    return count > 1000;
   }
 }

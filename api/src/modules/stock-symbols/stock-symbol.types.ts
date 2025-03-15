@@ -10,6 +10,14 @@ export type SymbolExternalApi = {
 };
 
 export type Response = {
+  statusCode: number; 
   message: string;
   data?: StockSymbol[];
 };
+
+
+export type QueryParams = {
+  query: string,
+  limit: number,
+  order: 'ASC' | 'DESC'
+}
