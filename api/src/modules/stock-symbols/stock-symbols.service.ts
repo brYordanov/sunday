@@ -4,7 +4,11 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { StockSymbol } from './stock-symbol.entity';
-import { QueryParams, Response, SymbolExternalApi } from './stock-symbol.types';
+import {
+  StockSymbolExternalApiDto,
+  StockSymbolQueryParamsDto,
+  StockSymbolResponceDto,
+} from '@sunday/validations';
 
 @Injectable()
 export class StockSymbolsService {
@@ -18,11 +22,11 @@ export class StockSymbolsService {
     this.apiKey = this.configService.get<string>('FINANCIAL_MODALING_PREP_API_KEY');
   }
 
-  async getSymbols(params: QueryParams) {
-    return params
+  async getSymbols(params: StockSymbolQueryParamsDto): Promise<any> {
+    return params;
   }
 
-  async populateTable(): Promise<Response> {
+  async populateTable(): Promise<StockSymbolResponceDto> {
     if (await this.isTablePopulated()) {
       return {
         statusCode: 200,
@@ -57,9 +61,9 @@ export class StockSymbolsService {
       data: savedEntities,
     };
   }
-  async getDataFromExternalApi(): Promise<SymbolExternalApi[]> {
+  async getDataFromExternalApi(): Promise<StockSymbolExternalApiDto[]> {
     try {
-      const response = await this.httpService.axiosRef.get<SymbolExternalApi[]>(
+      const response = await this.httpService.axiosRef.get<StockSymbolExternalApiDto[]>(
         `https://financialmodelingprep.com/api/v3/stock/list?apikey=${this.apiKey}`,
       );
       return response.data;

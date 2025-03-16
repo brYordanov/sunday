@@ -5,7 +5,7 @@ FROM node:22-alpine
 WORKDIR /app
 
 # Copy only backend package.json
-COPY api/package.json api/package-lock.json ./
+COPY api/package.json ./
 
 
 # Install backend dependencies only
