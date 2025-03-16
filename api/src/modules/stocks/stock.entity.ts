@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { TermAnalysis, TermPredictability } from '../stock.types';
+import { TermAnalysis, TermPredictability } from './stock.types';
 
 @Entity({ name: 'stocks' })
 export class Stock {

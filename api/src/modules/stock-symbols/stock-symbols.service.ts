@@ -6,9 +6,11 @@ import { Repository } from 'typeorm';
 import { StockSymbol } from './stock-symbol.entity';
 import {
   StockSymbolExternalApiDto,
+  StockSymbolPaginatedResponceDto,
   StockSymbolQueryParamsDto,
   StockSymbolResponceDto,
 } from '@sunday/validations';
+import { PaginationService } from 'src/core/services/pagination.service';
 
 @Injectable()
 export class StockSymbolsService {
@@ -18,18 +20,40 @@ export class StockSymbolsService {
     private readonly stockSymbolRepository: Repository<StockSymbol>,
     private readonly configService: ConfigService,
     private readonly httpService: HttpService,
+    private readonly paginationService: PaginationService,
   ) {
     this.apiKey = this.configService.get<string>('FINANCIAL_MODALING_PREP_API_KEY');
   }
 
-  async getSymbols(params: StockSymbolQueryParamsDto): Promise<any> {
-    return params;
+  async getSymbols(params: StockSymbolQueryParamsDto): Promise<StockSymbolPaginatedResponceDto> {
+    const queryBuilder = this.stockSymbolRepository
+      .createQueryBuilder('stock-symbol')
+      .orderBy('symbol', params.order);
+
+    if (params.query) {
+      queryBuilder.andWhere('stock-symbol.symbol LIKE :query', {
+        query: `%${params.query}%`,
+      });
+    }
+
+    this.paginationService.paginate(queryBuilder, params.page, params.limit);
+
+    const [data, total] = await queryBuilder.getManyAndCount();
+
+    return {
+      data,
+      metaData: {
+        total,
+        page: params.page,
+        itemsPerPage: params.limit > total ? total : params.limit,
+        totalPages: Math.ceil(total / params.limit),
+      },
+    };
   }
 
   async populateTable(): Promise<StockSymbolResponceDto> {
     if (await this.isTablePopulated()) {
       return {
-        statusCode: 200,
         message: 'Table already populated',
       };
     }
@@ -56,7 +80,6 @@ export class StockSymbolsService {
     }
 
     return {
-      statusCode: 200,
       message: 'successfully populated',
       data: savedEntities,
     };

@@ -13,7 +13,7 @@ export class ZodValidationInterceptor implements NestInterceptor {
 
         const bodySchema: AnyZodObject = this.reflector.get('zodBodySchema', context.getHandler())
         const querySchema: AnyZodObject = this.reflector.get('zodQuerySchema', context.getHandler())
-        const responseSchema: AnyZodObject = this.reflector.get('zodQuerySchema', context.getHandler())
+        const responseSchema: AnyZodObject = this.reflector.get('zodResponseSchema', context.getHandler())
         
         if(querySchema) {
             const queryValidation = querySchema.safeParse(request.query)

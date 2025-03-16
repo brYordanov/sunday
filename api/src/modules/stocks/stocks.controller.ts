@@ -1,13 +1,11 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { StocksService } from './stocks.service';
-import { Stock } from './entities/stock.entity';
+import { Stock } from './stock.entity';
 
 @Controller('stocks')
 export class StocksController {
   private readonly apiKey: string;
-  constructor(
-    private readonly stockService: StocksService,
-  ) {}
+  constructor(private readonly stockService: StocksService) {}
 
   @Get()
   async getStock(

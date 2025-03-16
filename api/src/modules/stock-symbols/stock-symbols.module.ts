@@ -4,6 +4,7 @@ import { StockSymbolsService } from './stock-symbols.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HttpModule } from '@nestjs/axios';
 import { StockSymbol } from './stock-symbol.entity';
+import { PaginationService } from '../../core/services/pagination.service';
 
 @Module({
   imports: [
@@ -13,6 +14,6 @@ import { StockSymbol } from './stock-symbol.entity';
     }),
   ],
   controllers: [StockSymbolsController],
-  providers: [StockSymbolsService],
+  providers: [StockSymbolsService, PaginationService],
 })
 export class StockSymbolsModule {}
