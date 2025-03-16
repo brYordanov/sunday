@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { StockQueryParams } from './stock.types';
 import { CacheService } from 'src/modules/cache/cache.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Stock } from './entities/stock.entity';
+import { Stock } from './stock.entity';
 import { Repository } from 'typeorm';
 import { createBody } from './stock.calculations';
 import { ConfigService } from '@nestjs/config';
@@ -19,7 +19,7 @@ export class StocksService {
     private readonly cacheService: CacheService,
     private configService: ConfigService,
   ) {
-    this.apiKey = this.configService.get<string>('STOCK_DATA_API_KEY');
+    this.apiKey = this.configService.get<string>('ALPHA_VANTAGE_API_KEY');
   }
 
   async processStock(stockSymbol) {

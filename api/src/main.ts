@@ -1,7 +1,11 @@
-import { NestFactory } from '@nestjs/core';
+import { resolve } from 'path';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
+import { ZodValidationInterceptor } from './core/interceptors/zod-validation';
+import 'tsconfig-paths/register';
+
 
 const envFile = process.env.NODE_ENV === 'production' ? '.env.docker' : '.env.local';
 dotenv.config({ path: envFile });
@@ -16,10 +20,9 @@ async function bootstrap() {
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
   };
 
-  console.log(process.env.PORT);
-  
+  app.useGlobalInterceptors(new ZodValidationInterceptor(new Reflector))
 
-  app.enableCors(corsOptions);  
+  app.enableCors(corsOptions);
 
   await app.listen(process.env.PORT ?? 3000);
 }

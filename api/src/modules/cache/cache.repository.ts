@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { Cache } from './entities/cache.entity';
+import { Cache } from './cache.entity';
 
 @Injectable()
 export class CacheRepository {
