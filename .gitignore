@@ -2,7 +2,10 @@
 *dist
 *node_modules
 *build
-*.env
+*.env.*
+postgres_data/
+*dump.sql
+
 
 # Logs
 logs

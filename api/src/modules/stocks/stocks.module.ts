@@ -6,7 +6,7 @@ import { StocksController } from './stocks.controller';
 import { StocksService } from './stocks.service';
 import { CacheModule } from 'src/modules/cache/cache.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Stock } from './entities/stock.entity';
+import { Stock } from './stock.entity';
 
 @Module({
   imports: [
