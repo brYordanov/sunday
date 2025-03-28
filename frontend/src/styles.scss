@@ -25,7 +25,16 @@ body {
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 .mat-mdc-form-field-subscript-wrapper {
   height: 0 !important;
   overflow: hidden;
+}
+
+.mat-mdc-progress-spinner {
+  width: 81% !important;
+  height: 81% !important;
 }
