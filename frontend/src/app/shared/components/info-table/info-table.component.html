@@ -8,8 +8,15 @@
             {{ element[column.name] | date : 'yyyy-MM-dd' }}
           </ng-container>
 
-          <ng-container *ngIf="column.type === 'Button'">
-            <button mat-flat-button color="primary" type="button">Details</button>
+          <ng-container *ngIf="column.type === 'Link'">
+            <a
+              mat-flat-button
+              color="primary"
+              type="button"
+              [routerLink]="[column.linkPath, element.symbol]"
+            >
+              Details
+            </a>
           </ng-container>
 
           <ng-template #isOther>

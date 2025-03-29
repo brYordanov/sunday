@@ -1,16 +1,16 @@
 import { Component, inject } from '@angular/core';
-import { SearchBarComponent } from '../../shared/components/search-bar/search-bar.component';
-import { ContainerComponent } from '../../shared/components/container/container.component';
+import { SearchBarComponent } from '../../../shared/components/search-bar/search-bar.component';
+import { ContainerComponent } from '../../../shared/components/container/container.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { StockService } from './stocks.service';
+import { StockService } from '../stocks.service';
 import { CommonModule } from '@angular/common';
 import { shareReplay, tap } from 'rxjs';
-import { Column } from '../../shared/components/info-table/info-table.types';
-import { InfoTableComponent } from '../../shared/components/info-table/info-table.component';
-import { LoaderComponent } from '../../shared/components/loader/loader.component';
+import { Column } from '../../../shared/components/info-table/info-table.types';
+import { InfoTableComponent } from '../../../shared/components/info-table/info-table.component';
+import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-stocks',
@@ -25,10 +25,10 @@ import { LoaderComponent } from '../../shared/components/loader/loader.component
     InfoTableComponent,
     LoaderComponent,
   ],
-  templateUrl: './stocks.component.html',
-  styleUrl: './stocks.component.scss',
+  templateUrl: './st-list-page.component.html',
+  styleUrl: './st-list-page.component.scss',
 })
-export class StocksComponent {
+export class StocksListComponent {
   private stockService = inject(StockService);
   isLoading = false;
   tableColumns: Column[] = [
@@ -49,7 +49,8 @@ export class StocksComponent {
     {
       name: 'action',
       title: '',
-      type: 'Button',
+      type: 'Link',
+      linkPath: '/stocks',
     },
   ];
 

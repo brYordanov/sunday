@@ -1,10 +1,17 @@
 import { Routes } from '@angular/router';
-import { StocksComponent } from './features/stocks/stocks.component';
+import { StocksListComponent } from './features/stocks/st-list-page/st-list-page.component';
 
 export const routes: Routes = [
   {
     path: '',
-    component: StocksComponent,
+    component: StocksListComponent,
     pathMatch: 'full',
+  },
+  {
+    path: 'stocks/:symbol',
+    loadComponent: () =>
+      import('./features/stocks/st-details-page/st-details-page.component').then(
+        (m) => m.StDetailsPageComponent,
+      ),
   },
 ];
