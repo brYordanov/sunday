@@ -42,19 +42,23 @@ export class StocksComponent {
       type: 'Date',
     },
     {
-      name: 'newestRecordDate',
-      title: 'Newest Record Date',
-      type: 'Date',
-    },
-    {
       name: 'createdAt',
       title: 'Monitored Since',
       type: 'Date',
     },
+    {
+      name: 'action',
+      title: '',
+      type: 'Button',
+    },
   ];
 
   stockRegisterForm = new FormGroup({
-    stockSymbol: new FormControl('', { nonNullable: true, validators: Validators.required }),
+    stockSymbol: new FormControl('', {
+      nonNullable: true,
+      validators: Validators.required,
+      updateOn: 'submit',
+    }),
   });
 
   stocksData = this.stockService.stocks$;

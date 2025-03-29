@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { Column } from './info-table.types';
 import { Observable } from 'rxjs';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-info-table',
-  imports: [CommonModule, MatTableModule],
+  imports: [CommonModule, MatTableModule, MatButtonModule],
   templateUrl: './info-table.component.html',
   styleUrl: './info-table.component.scss',
 })
