@@ -5,19 +5,19 @@ FROM node:22-alpine
 WORKDIR /app
 
 # Copy only backend package.json
-COPY api/package.json api/package.json
+COPY backend/package.json backend/package.json
 COPY libs/validations/package.json libs/validations/package.json
 
-WORKDIR /app/api
+WORKDIR /app/backend
 # Install backend dependencies only
 RUN npm install --only=production
 
 # Copy only the backend folder (ignoring frontend)
-COPY api/. .
+COPY backend/. .
 COPY libs/validations/. ../libs/validations/
 
-# Expose the API port
+# Expose the backend port
 EXPOSE 4321
 
-# Start the API
+# Start the backend
 CMD ["npm", "run", "start"]
