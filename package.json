@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:be-local": "concurrently 'docker-compose --env-file ./api/.env.local -f docker-compose.local.yaml up --build' 'cd api && npm run start:dev'",
-    "start:be-docker": "docker-compose --env-file ./api/.env.docker -f docker-compose.yaml up --build",
-    "start:db": "docker-compose --env-file ./api/.env.local -f docker-compose.local.yaml up --build",
-    "start:api": "cd api && npm run start:dev",
+    "start:be-local": "concurrently 'docker-compose --env-file ./backend/.env.local -f docker-compose.local.yaml up --build' 'cd backend && npm run start:dev'",
+    "start:be-docker": "docker-compose --env-file ./backend/.env.docker -f docker-compose.yaml up --build",
+    "start:db": "docker-compose --env-file ./backend/.env.local -f docker-compose.local.yaml up --build",
+    "start:nest": "cd backend && npm run start:dev",
     "start:frontend": "cd frontend && npx ng serve",
     "start:all": "concurrently 'npm run start:be-docker' 'npm run start:frontend'",
     "lint": "eslint **/*.ts",
@@ -27,5 +27,9 @@
   "homepage": "https://github.com/brYordanov/sunday#readme",
   "devDependencies": {
     "concurrently": "^9.1.2"
+  },
+  "dependencies": {
+    "axios": "^1.8.4",
+    "cheerio": "^1.0.0"
   }
 }
