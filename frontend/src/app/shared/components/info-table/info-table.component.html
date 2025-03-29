@@ -4,11 +4,15 @@
       <ng-container matColumnDef="{{ column.name }}">
         <th mat-header-cell *matHeaderCellDef>{{ column.title }}</th>
         <td mat-cell *matCellDef="let element">
-          <ng-container *ngIf="column.type === 'Date'; else isNotDate">
+          <ng-container *ngIf="column.type === 'Date'; else isOther">
             {{ element[column.name] | date : 'yyyy-MM-dd' }}
           </ng-container>
 
-          <ng-template #isNotDate>
+          <ng-container *ngIf="column.type === 'Button'">
+            <button mat-flat-button color="primary" type="button">Details</button>
+          </ng-container>
+
+          <ng-template #isOther>
             {{ element[column.name] }}
           </ng-template>
         </td>
@@ -20,4 +24,4 @@
   </table>
 </ng-container>
 
-<ng-template #loading> loader </ng-template>
+<ng-template #loading>loader</ng-template>

@@ -11,5 +11,6 @@ $container-breakpoints: (
 );
 
 .container {
+  position: relative;
   @include container($container-breakpoints);
 }

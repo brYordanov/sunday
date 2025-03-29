@@ -1,5 +1,5 @@
 export type Column = {
   name: string;
   title: string;
-  type?: 'Date';
+  type?: 'Date' | 'Button';
 };
