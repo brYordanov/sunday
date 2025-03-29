@@ -6,6 +6,8 @@
 postgres_data/
 *dump.sql
 
+scraped-*
+
 
 # Logs
 logs

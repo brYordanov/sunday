@@ -14,11 +14,11 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  api:
+  backend:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: sunday_api
+    container_name: sunday_backend
     restart: always
     environment:
       PG_HOST: postgres

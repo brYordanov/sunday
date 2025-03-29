@@ -11,7 +11,7 @@ export class StockSymbolsController {
   @Get()
   @ValidateQuery(StockSymbolQueryParamsSchema)
   async getSymbols(@Query() params: StockSymbolQueryParamsDto) {
-    return this.stockSymbolSrvice.getSymbols(params)
+    return this.stockSymbolSrvice.getSymbols(params);
   }
 
   @Post('populate')
