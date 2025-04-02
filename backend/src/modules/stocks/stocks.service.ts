@@ -7,7 +7,15 @@ import { Stock } from './stock.entity';
 import { Repository } from 'typeorm';
 import { createBody } from './stock.calculations';
 import { ConfigService } from '@nestjs/config';
-import { GetStockQueryParamsDto } from '@sunday/validations';
+import {
+  StockSymbolDto,
+  GetStockQueryParamsDto,
+  StockSymbolPropertyDto,
+  DetailedStockInfoDto,
+  StockSchema,
+  StockSymbolSchema,
+} from '@sunday/validations';
+import { StockSymbolsService } from '../stock-symbols/stock-symbols.service';
 
 @Injectable()
 export class StocksService {
@@ -17,6 +25,7 @@ export class StocksService {
     private readonly stockRepository: Repository<Stock>,
     private readonly httpService: HttpService,
     private readonly cacheService: CacheService,
+    private readonly stockSymbolService: StockSymbolsService,
     private configService: ConfigService,
   ) {
     this.apiKey = this.configService.get<string>('ALPHA_VANTAGE_API_KEY');
@@ -75,5 +84,21 @@ export class StocksService {
     });
 
     return query.getMany();
+  }
+
+  async getDetailedInfo(params: StockSymbolPropertyDto): Promise<DetailedStockInfoDto> {
+    const [analysedData, symbolData, cachedData] = await Promise.all([
+      this.stockRepository.findOne({
+        where: { symbol: params.symbol },
+      }),
+      this.stockSymbolService.getSpecificSymbol(params.symbol),
+      this.cacheService.getCachedData(params.symbol),
+    ]);
+
+    return {
+      analysedData: StockSchema.parse(analysedData),
+      stockSymbolData: StockSymbolSchema.parse(symbolData),
+      cachedData: JSON.parse(cachedData),
+    };
   }
 }

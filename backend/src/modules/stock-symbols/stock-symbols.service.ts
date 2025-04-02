@@ -99,4 +99,12 @@ export class StockSymbolsService {
     const count = await this.stockSymbolRepository.count();
     return count > 1000;
   }
+
+  async getSpecificSymbol(symbolName: string): Promise<StockSymbol> {
+    return this.stockSymbolRepository.findOne({
+      where: {
+        symbol: symbolName,
+      },
+    });
+  }
 }

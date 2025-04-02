@@ -15,5 +15,6 @@ import { PaginationService } from '../../core/services/pagination.service';
   ],
   controllers: [StockSymbolsController],
   providers: [StockSymbolsService, PaginationService],
+  exports: [StockSymbolsService],
 })
 export class StockSymbolsModule {}

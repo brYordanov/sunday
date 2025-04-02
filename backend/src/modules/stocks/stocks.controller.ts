@@ -4,9 +4,11 @@ import { Stock } from './stock.entity';
 import {
   GetStockQueryParamsDto,
   GetStockQueryParamsSchema,
-  RegisterStockBodyDto,
-  RegisterStockBodySchema,
+  StockSymbolDto,
+  StockSymbolSchema,
   StockSchema,
+  StockSymbolPropertySchema,
+  StockSymbolPropertyDto,
 } from '@sunday/validations';
 import { ValidateBody, ValidateQuery, ValidateResponse } from 'src/core/decorators/validation';
 
@@ -21,10 +23,17 @@ export class StocksController {
     return this.stockService.getStock(params);
   }
 
+  // @ValidateResponse()
+  @Get('detailed')
+  @ValidateQuery(StockSymbolPropertySchema)
+  async getDetailedStockInfo(@Query() params: StockSymbolPropertyDto) {
+    return this.stockService.getDetailedInfo(params);
+  }
+
   @Post()
-  @ValidateBody(RegisterStockBodySchema)
+  @ValidateBody(StockSymbolPropertySchema)
   @ValidateResponse(StockSchema)
-  async registerStock(@Body() body: RegisterStockBodyDto): Promise<Stock> {
+  async registerStock(@Body() body: StockSymbolDto): Promise<Stock> {
     return this.stockService.processStock(body.symbol);
   }
 }

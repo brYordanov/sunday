@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { parseStringToDate } from './helpers';
+import { StockSymbolSchema } from './stock-symbols.types';
 
 const TermSchema = z.object({
   trend: z.string(),
@@ -37,8 +38,16 @@ export const GetStockQueryParamsSchema = z.object({
 
 export type GetStockQueryParamsDto = z.infer<typeof GetStockQueryParamsSchema>;
 
-export const RegisterStockBodySchema = z.object({
+export const StockSymbolPropertySchema = z.object({
   symbol: z.string().nonempty(),
 });
 
-export type RegisterStockBodyDto = z.infer<typeof RegisterStockBodySchema>;
+export type StockSymbolPropertyDto = z.infer<typeof StockSymbolPropertySchema>;
+
+export const DetailedStockInfoSchema = z.object({
+  analysedData: StockSchema,
+  stockSymbolData: StockSymbolSchema,
+  cachedData: z.record(z.any()),
+});
+
+export type DetailedStockInfoDto = z.infer<typeof DetailedStockInfoSchema>;
