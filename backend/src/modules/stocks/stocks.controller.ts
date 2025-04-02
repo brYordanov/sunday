@@ -1,25 +1,30 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { StocksService } from './stocks.service';
 import { Stock } from './stock.entity';
+import {
+  GetStockQueryParamsDto,
+  GetStockQueryParamsSchema,
+  RegisterStockBodyDto,
+  RegisterStockBodySchema,
+  StockSchema,
+} from '@sunday/validations';
+import { ValidateBody, ValidateQuery, ValidateResponse } from 'src/core/decorators/validation';
 
 @Controller('stocks')
 export class StocksController {
-  private readonly apiKey: string;
   constructor(private readonly stockService: StocksService) {}
 
   @Get()
-  async getStock(
-    @Query('id') id?: number,
-    @Query('symbol') symbol?: string,
-    @Query('createdAfter') createdAfter?: string,
-    @Query('createdBefore') createdBefore?: string,
-    @Query('order') order?: 'ASC' | 'DESC',
-  ): Promise<Stock[]> {
-    return this.stockService.getStock({ id, symbol, createdAfter, createdBefore, order });
+  @ValidateQuery(GetStockQueryParamsSchema)
+  @ValidateResponse(StockSchema)
+  async getStock(@Query() params: GetStockQueryParamsDto): Promise<Stock[] | Stock> {
+    return this.stockService.getStock(params);
   }
 
   @Post()
-  async registerStock(@Body('stockSymbol') stockSymbol: string) {
-    return this.stockService.processStock(stockSymbol);
+  @ValidateBody(RegisterStockBodySchema)
+  @ValidateResponse(StockSchema)
+  async registerStock(@Body() body: RegisterStockBodyDto): Promise<Stock> {
+    return this.stockService.processStock(body.symbol);
   }
 }

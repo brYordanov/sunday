@@ -1,8 +1,13 @@
 import { Controller, Get, Post, Query } from '@nestjs/common';
-import { StockSymbolQueryParamsDto, StockSymbolQueryParamsSchema } from '@sunday/validations';
+import {
+  StockSymbolPaginatedResponceDto,
+  StockSymbolPaginatedResponceSchema,
+  StockSymbolQueryParamsDto,
+  StockSymbolQueryParamsSchema,
+} from '@sunday/validations';
 
 import { StockSymbolsService } from './stock-symbols.service';
-import { ValidateQuery } from 'src/core/decorators/validation';
+import { ValidateQuery, ValidateResponse } from 'src/core/decorators/validation';
 
 @Controller('stock-symbols')
 export class StockSymbolsController {
@@ -10,7 +15,10 @@ export class StockSymbolsController {
 
   @Get()
   @ValidateQuery(StockSymbolQueryParamsSchema)
-  async getSymbols(@Query() params: StockSymbolQueryParamsDto) {
+  @ValidateResponse(StockSymbolPaginatedResponceSchema)
+  async getSymbols(
+    @Query() params: StockSymbolQueryParamsDto,
+  ): Promise<StockSymbolPaginatedResponceDto> {
     return this.stockSymbolSrvice.getSymbols(params);
   }
 

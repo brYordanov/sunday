@@ -6,7 +6,7 @@ import { StocksService } from 'src/modules/stocks/stocks.service';
 
 @Injectable()
 export class SchedulerService {
-  private readonly sotckSymbolsFilePath = path.join(process.cwd(), 'scraped-s&p500stocks.json');
+  private readonly stockSymbolsFilePath = path.join(process.cwd(), 'scraped-s&p500stocks.json');
   private readonly progressIndexFilePath = path.join(process.cwd(), 'progressIndex.json');
   private readonly logger = new Logger(SchedulerService.name);
   constructor(
@@ -17,11 +17,17 @@ export class SchedulerService {
   @Cron('0/5 * * * * *', { name: 'processDailyStocks' })
   async processDailyStocks() {
     try {
-      const symbols = JSON.parse(fs.readFileSync(this.sotckSymbolsFilePath, 'utf-8'));
-
-      if (!symbols) {
-        this.logger.error('No file found');
+      const doesFileExits = fs.existsSync(this.stockSymbolsFilePath);
+      if (!doesFileExits) {
+        this.logger.error('No stoc symbols file found');
         this.schedulerRegistry.deleteCronJob('processDailyStocks');
+        return;
+      }
+      const symbols = JSON.parse(fs.readFileSync(this.stockSymbolsFilePath, 'utf-8'));
+      if (!symbols) {
+        this.logger.error('No symbols found');
+        this.schedulerRegistry.deleteCronJob('processDailyStocks');
+        return;
       }
 
       let progressIndex = 0;

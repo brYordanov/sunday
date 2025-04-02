@@ -1,4 +1,5 @@
-import { symbol, z } from 'zod';
+import { z } from 'zod';
+import { parseStringToDate } from './helpers';
 
 const TermSchema = z.object({
   trend: z.string(),
@@ -21,7 +22,23 @@ export const StockSchema = z.object({
     longTerm: z.boolean(),
     shortTerm: z.boolean(),
   }),
-  createdAt: z.string(),
+  createdAt: z.date().transform((date) => date.toISOString().split('T')[0]),
 });
 
 export type StockDto = z.infer<typeof StockSchema>;
+
+export const GetStockQueryParamsSchema = z.object({
+  id: z.coerce.number().optional(),
+  symbol: z.string().optional(),
+  createdAfter: z.string().optional(),
+  createdBefore: z.string().optional(),
+  order: z.enum(['ASC', 'DESC']).optional(),
+});
+
+export type GetStockQueryParamsDto = z.infer<typeof GetStockQueryParamsSchema>;
+
+export const RegisterStockBodySchema = z.object({
+  symbol: z.string().nonempty(),
+});
+
+export type RegisterStockBodyDto = z.infer<typeof RegisterStockBodySchema>;
