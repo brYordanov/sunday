@@ -1,0 +1,32 @@
+.mat-mdc-form-field-subscript-wrapper {
+  height: 0 !important;
+  overflow: hidden;
+}
+
+.mat-mdc-progress-spinner {
+  width: 81% !important;
+  height: 81% !important;
+}
+
+.mat-mdc-cell {
+  text-align: center !important;
+}
+
+.mat-mdc-header-cell {
+  text-align: center !important;
+}
+
+.mat-button-toggle-group {
+  display: grid !important;
+  grid-auto-flow: column !important;
+  grid-auto-columns: 1fr !important;
+}
+
+.mat-button-toggle-appearance-standard {
+  color: pink !important;
+  background-color: blue !important;
+}
+.mat-button-toggle-appearance-standard.mat-button-toggle-checked {
+  color: red !important;
+  background-color: black !important;
+}
