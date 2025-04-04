@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { parseStringToDate } from './helpers';
 import { StockSymbolSchema } from './stock-symbols.types';
 
 const TermSchema = z.object({
@@ -31,8 +30,14 @@ export type StockDto = z.infer<typeof StockSchema>;
 export const GetStockQueryParamsSchema = z.object({
   id: z.coerce.number().optional(),
   symbol: z.string().optional(),
-  createdAfter: z.string().optional(),
-  createdBefore: z.string().optional(),
+  createdAfter: z
+    .string()
+    .regex(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/, 'Date must be in the format YYYY-MM-DD')
+    .optional(),
+  createdBefore: z
+    .string()
+    .regex(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/, 'Date must be in the format YYYY-MM-DD')
+    .optional(),
   order: z.enum(['ASC', 'DESC']).optional(),
 });
 
