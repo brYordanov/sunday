@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
+import { trigger, transition, style, animate } from '@angular/animations';
 import { map, shareReplay, switchMap } from 'rxjs';
 import { StockService } from '../stocks.service';
 import { CommonModule } from '@angular/common';
