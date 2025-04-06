@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, shareReplay, switchMap } from 'rxjs';
 import { API_URL } from '../../../../env';
 import { registerStockPayload } from './stocks.types';
-import { StockDto } from '@sunday/validations';
+import { DetailedStockInfoDto, StockDto } from '@sunday/validations';
 
 @Injectable({
   providedIn: 'root',
@@ -24,5 +24,9 @@ export class StockService {
 
   refreshStocks() {
     this.refresh$.next();
+  }
+
+  getDetailedStockInfo(stockSymbol: string): Observable<DetailedStockInfoDto> {
+    return this.http.get<DetailedStockInfoDto>(`${API_URL}/stocks/detailed?symbol=${stockSymbol}`);
   }
 }

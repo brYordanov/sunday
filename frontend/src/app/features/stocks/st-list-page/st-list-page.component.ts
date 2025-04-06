@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { SearchBarComponent } from '../../../shared/components/search-bar/search-bar.component';
-import { ContainerComponent } from '../../../shared/components/container/container.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -16,7 +15,6 @@ import { LoaderComponent } from '../../../shared/components/loader/loader.compon
   selector: 'app-stocks',
   imports: [
     SearchBarComponent,
-    ContainerComponent,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,

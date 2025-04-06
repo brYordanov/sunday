@@ -14,6 +14,8 @@ export class ChartComponent implements AfterViewInit {
   @Input() id: string = '';
 
   ngAfterViewInit(): void {
+    console.log(this.chartData);
+
     if (!this.chartData) {
       console.error('Chart data is not provided');
       return;
