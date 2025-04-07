@@ -53,10 +53,10 @@ export class StocksListComponent {
   ];
 
   stockRegisterForm = new FormGroup({
-    stockSymbol: new FormControl('', {
+    symbol: new FormControl('', {
       nonNullable: true,
       validators: Validators.required,
-      updateOn: 'submit',
+      // updateOn: 'submit',
     }),
   });
 
@@ -64,19 +64,19 @@ export class StocksListComponent {
 
   onSubmit() {
     if (this.stockRegisterForm.valid) {
-      const stockSymbol = this.stockRegisterForm.value.stockSymbol!;
+      const symbol = this.stockRegisterForm.value.symbol!;
       this.isLoading = true;
       this.stockService
-        .registerStock({ stockSymbol })
+        .registerStock({ symbol })
         .pipe(
           tap(() => {
             this.isLoading = false;
             this.stockService.refreshStocks();
             this.stockRegisterForm.reset();
-            this.stockRegisterForm.reset({ stockSymbol: '' });
+            this.stockRegisterForm.reset({ symbol: '' });
             this.stockRegisterForm.markAsPristine();
             this.stockRegisterForm.markAsUntouched();
-            this.stockRegisterForm.controls.stockSymbol.updateValueAndValidity();
+            this.stockRegisterForm.controls.symbol.updateValueAndValidity();
           }),
         )
         .subscribe();

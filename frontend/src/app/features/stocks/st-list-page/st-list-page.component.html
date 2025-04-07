@@ -1,6 +1,6 @@
 <form [formGroup]="stockRegisterForm" (ngSubmit)="onSubmit()" class="form">
   <app-search-bar
-    [control]="stockRegisterForm.controls.stockSymbol"
+    [control]="stockRegisterForm.controls.symbol"
     [label]="'Stock Symbol'"
     [variation]="'fullWidth'"
   ></app-search-bar>
@@ -11,4 +11,5 @@
     <app-loader *ngIf="isLoading" [type]="'overlay'"></app-loader>
   </div>
 </form>
+{{ stockRegisterForm.valid }}
 <app-info-table [data$]="stocksData" [columns]="tableColumns"></app-info-table>

@@ -1,0 +1,30 @@
+@use '@angular/material' as mat;
+@use '../material-palettes/theme-1-light_theme-colors.scss' as theme-1-light;
+
+html {
+  .theme-1-light {
+    @include mat.theme(
+      (
+        color: (
+          theme-type: light,
+          primary: theme-1-light.$primary-palette,
+        ),
+        typography: Roboto,
+        density: 0,
+      )
+    );
+  }
+
+  .theme-1-dark {
+    @include mat.theme(
+      (
+        color: (
+          theme-type: light,
+          primary: theme-1-light.$primary-palette,
+        ),
+        typography: Roboto,
+        density: 0,
+      )
+    );
+  }
+}

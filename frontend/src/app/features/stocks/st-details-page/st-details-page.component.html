@@ -1,4 +1,3 @@
-<p>st-details-page works!</p>
 <div *ngIf="stockData$ | async as stock; else loading">
   <h1>{{ stock.stockSymbolData.symbol }}</h1>
   <h2>{{ stock.stockSymbolData.name }}</h2>
