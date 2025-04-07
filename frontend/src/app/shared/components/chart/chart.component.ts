@@ -34,10 +34,43 @@ export class ChartComponent implements AfterViewInit {
       return;
     }
 
-    const layout = {
-      title: 'Stock Price Chart',
-      xaxis: { type: 'date' },
-      yaxis: { title: 'Price (USD)' },
+    const styles = getComputedStyle(document.documentElement);
+    const bgColor = styles.getPropertyValue('--color-background')?.trim();
+    const textColor = styles.getPropertyValue('--color-text')?.trim();
+    const lineColor = styles.getPropertyValue('--color-accent-primary')?.trim();
+    const upColor = styles.getPropertyValue('--color-success')?.trim();
+    const downColor = styles.getPropertyValue('--color-error')?.trim();
+    const fontFamily = styles.getPropertyValue('--font-primary')?.trim();
+    console.log(getComputedStyle(document.documentElement).getPropertyValue('--color-background'));
+
+    const layout: Partial<Plotly.Layout> = {
+      title: {
+        text: 'Stock Price Chart',
+        font: {
+          family: fontFamily,
+          color: textColor,
+        },
+      },
+      paper_bgcolor: bgColor,
+      plot_bgcolor: bgColor,
+      font: {
+        family: fontFamily,
+        color: textColor,
+      },
+      xaxis: {
+        type: 'date',
+        color: textColor,
+        gridcolor: 'rgba(255,255,255,0.05)', // optional: subtle gridlines
+      },
+      yaxis: {
+        title: {
+          text: 'Price (USD)',
+          font: { color: textColor },
+        },
+        tickfont: { color: textColor },
+        gridcolor: 'rgba(255,255,255,0.05)',
+      },
+      margin: { t: 40, l: 50, r: 10, b: 40 },
     };
 
     let trace: any;
@@ -51,31 +84,18 @@ export class ChartComponent implements AfterViewInit {
         close: this.chartData.close,
         type: 'candlestick',
         name: 'Price',
-        increasing: { line: { color: '#3D9970' }, fillcolor: '#3D9970' },
-        decreasing: { line: { color: '#FF4136' }, fillcolor: '#FF4136' },
+        increasing: { line: { color: upColor } },
+        decreasing: { line: { color: downColor } },
       };
-    } else if (this.chartType === 'line') {
+    } else {
       trace = {
         x: this.chartData.dates,
         y: this.chartData.close,
         type: 'scatter',
         mode: 'lines',
-        fill: 'none',
+        fill: this.chartType === 'area' ? 'tozeroy' : 'none',
         line: {
-          color: '#3D9970',
-          shape: 'linear',
-        },
-        name: 'Close Price',
-      };
-    } else if (this.chartType === 'area') {
-      trace = {
-        x: this.chartData.dates,
-        y: this.chartData.close,
-        type: 'scatter',
-        mode: 'lines',
-        fill: 'tozeroy',
-        line: {
-          color: '#3D9970',
+          color: lineColor,
           shape: 'linear',
         },
         name: 'Close Price',
@@ -83,5 +103,10 @@ export class ChartComponent implements AfterViewInit {
     }
 
     Plotly.react(`stock-chart-${this.id}`, [trace], layout);
+  }
+
+  getCurrentThemeStyles(): CSSStyleDeclaration {
+    const themeElement = document.body;
+    return getComputedStyle(themeElement);
   }
 }

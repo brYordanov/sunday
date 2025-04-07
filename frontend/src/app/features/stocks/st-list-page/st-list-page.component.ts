@@ -56,7 +56,6 @@ export class StocksListComponent {
     symbol: new FormControl('', {
       nonNullable: true,
       validators: Validators.required,
-      // updateOn: 'submit',
     }),
   });
 
@@ -76,7 +75,7 @@ export class StocksListComponent {
             this.stockRegisterForm.reset({ symbol: '' });
             this.stockRegisterForm.markAsPristine();
             this.stockRegisterForm.markAsUntouched();
-            this.stockRegisterForm.controls.symbol.updateValueAndValidity();
+            this.stockRegisterForm.get('symbol')?.setErrors(null);
           }),
         )
         .subscribe();

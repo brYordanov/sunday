@@ -1,5 +1,5 @@
 @use '@angular/material' as mat;
-@use './theme-1-light.scss';
+@use './material-themes.scss';
 
 :root,
 .theme-1-light {
@@ -9,6 +9,8 @@
   --color-text: #1a1a1a;
   --color-success: #2ecc71;
   --color-error: #e74c3c;
+  --font-primary: 'Inter', sans-serif;
+  --font-secondary: 'Roboto', sans-serif;
 }
 
 .theme-1-dark {
@@ -18,6 +20,8 @@
   --color-text: #e0e0e0;
   --color-success: #27ae60;
   --color-error: #c0392b;
+  --font-primary: 'Inter', sans-serif;
+  --font-secondary: 'Roboto', sans-serif;
 }
 
 .theme-2-light {
@@ -27,6 +31,8 @@
   --color-text: #1c1c1c;
   --color-success: #00b894;
   --color-error: #d63031;
+  --font-primary: 'Orbitron', sans-serif;
+  --font-secondary: 'DM Mono', monospace;
 }
 
 .theme-2-dark {
@@ -36,4 +42,6 @@
   --color-text: #f0f0f0;
   --color-success: #00ffab;
   --color-error: #ff4e50;
+  --font-primary: 'Orbitron', sans-serif;
+  --font-secondary: 'DM Mono', monospace;
 }
