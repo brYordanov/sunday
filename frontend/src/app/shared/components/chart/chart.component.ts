@@ -41,7 +41,6 @@ export class ChartComponent implements AfterViewInit {
     const upColor = styles.getPropertyValue('--color-success')?.trim();
     const downColor = styles.getPropertyValue('--color-error')?.trim();
     const fontFamily = styles.getPropertyValue('--font-primary')?.trim();
-    console.log(getComputedStyle(document.documentElement).getPropertyValue('--color-background'));
 
     const layout: Partial<Plotly.Layout> = {
       title: {
