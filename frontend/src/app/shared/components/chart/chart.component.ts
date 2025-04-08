@@ -59,7 +59,8 @@ export class ChartComponent implements AfterViewInit {
       xaxis: {
         type: 'date',
         color: textColor,
-        gridcolor: 'rgba(255,255,255,0.05)', // optional: subtle gridlines
+        gridcolor: 'rgba(255,255,255,0.05)',
+        range: [this.chartData.dates[0], this.chartData.dates[this.chartData.dates.length - 1]],
       },
       yaxis: {
         title: {
@@ -68,6 +69,7 @@ export class ChartComponent implements AfterViewInit {
         },
         tickfont: { color: textColor },
         gridcolor: 'rgba(255,255,255,0.05)',
+        range: [Math.min(...this.chartData.close), Math.max(...this.chartData.close)],
       },
       margin: { t: 40, l: 50, r: 10, b: 40 },
     };
@@ -86,7 +88,12 @@ export class ChartComponent implements AfterViewInit {
         increasing: { line: { color: upColor } },
         decreasing: { line: { color: downColor } },
       };
+      Plotly.react(`stock-chart-${this.id}`, [trace], layout);
     } else {
+      const totalFrames = this.chartData.dates.length;
+
+      const x = this.chartData.dates;
+      const y = this.chartData.close;
       trace = {
         x: this.chartData.dates,
         y: this.chartData.close,
@@ -99,9 +106,39 @@ export class ChartComponent implements AfterViewInit {
         },
         name: 'Close Price',
       };
-    }
 
-    Plotly.react(`stock-chart-${this.id}`, [trace], layout);
+      if (totalFrames > 12) {
+        Plotly.react(`stock-chart-${this.id}`, [trace], layout);
+        return;
+      }
+
+      this.renderWithAnimation(trace, layout, x, y);
+    }
+  }
+
+  private renderWithAnimation(trace: any, layout: Plotly.Layout, x: string[], y: number[]) {
+    const initialTrace = {
+      ...trace,
+      x: [],
+      y: [],
+    };
+
+    Plotly.react(`stock-chart-${this.id}`, [initialTrace], layout).then(() => {
+      const frames = x.map((_, i) => ({
+        data: [
+          {
+            x: x.slice(0, i + 1),
+            y: y.slice(0, i + 1),
+          },
+        ],
+      }));
+
+      Plotly.animate(`stock-chart-${this.id}`, frames, {
+        frame: { duration: 5, redraw: true },
+        transition: { duration: 0 },
+        mode: 'immediate',
+      });
+    });
   }
 
   getCurrentThemeStyles(): CSSStyleDeclaration {
