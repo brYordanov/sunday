@@ -8,11 +8,10 @@ import { LoaderComponent } from '../../../shared/components/loader/loader.compon
 import { prepareChartData } from './helpers';
 import { ChartComponent } from '../../../shared/components/chart/chart.component';
 import { Column } from '../../../shared/components/info-table/info-table.types';
-import { InfoTableComponent } from '../../../shared/components/info-table/info-table.component';
 
 @Component({
   selector: 'app-st-details-page',
-  imports: [CommonModule, LoaderComponent, MatTabsModule, ChartComponent, InfoTableComponent],
+  imports: [CommonModule, LoaderComponent, MatTabsModule, ChartComponent],
   templateUrl: './st-details-page.component.html',
   styleUrl: './st-details-page.component.scss',
 })

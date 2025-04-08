@@ -1,0 +1,26 @@
+<header class="header">
+  <app-container>
+    <div class="header-container">
+      <a [routerLink]="['/']" class="link">
+        <img width="132" height="40" src="logo.png" alt="sunday" />
+      </a>
+      <div class="content">
+        <nav class="navigation">
+          <ul class="link-list">
+            <li><a [routerLink]="['/stocks']" class="link">Stocks</a></li>
+            <li><a [routerLink]="['/etfs']" class="link">ETFs</a></li>
+            <li><a [routerLink]="['/crypto']" class="link">Crypto</a></li>
+          </ul>
+        </nav>
+        <button type="button" class="light-btn">
+          <mat-icon>light</mat-icon>
+          <div class="ray-container light-theme-only">
+            <div class="light-ray"></div>
+            <div class="light-ray"></div>
+            <div class="light-ray"></div>
+          </div>
+        </button>
+      </div>
+    </div>
+  </app-container>
+</header>
