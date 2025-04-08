@@ -6,7 +6,7 @@ export const StockSymbolQueryParamsSchema = z.object({
   query: z.string().optional(),
   limit: z.coerce.number().int().positive().default(10),
   order: z.enum(['ASC', 'DESC']).default('ASC'),
-  page: z.number().default(1),
+  page: z.coerce.number().int().positive().default(1),
 });
 export type StockSymbolQueryParamsDto = z.infer<typeof StockSymbolQueryParamsSchema>;
 

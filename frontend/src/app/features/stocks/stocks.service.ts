@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, shareReplay, switchMap } from 'rxjs';
 import { API_URL } from '../../../../env';
 import { registerStockPayload } from './stocks.types';
+import { DetailedStockInfoDto, StockDto } from '@sunday/validations';
 
 @Injectable({
   providedIn: 'root',
@@ -13,15 +14,19 @@ export class StockService {
   private refresh$ = new BehaviorSubject<void>(undefined);
 
   stocks$ = this.refresh$.pipe(
-    switchMap(() => this.http.get<any>(`${API_URL}/stocks`)),
-    shareReplay()
+    switchMap(() => this.http.get<StockDto[]>(`${API_URL}/stocks`)),
+    shareReplay(),
   );
 
-  registerStock(payload: registerStockPayload): Observable<any> {
+  registerStock(payload: registerStockPayload): Observable<StockDto> {
     return this.http.post<any>(`${API_URL}/stocks`, payload);
   }
 
   refreshStocks() {
     this.refresh$.next();
+  }
+
+  getDetailedStockInfo(stockSymbol: string): Observable<DetailedStockInfoDto> {
+    return this.http.get<DetailedStockInfoDto>(`${API_URL}/stocks/detailed?symbol=${stockSymbol}`);
   }
 }

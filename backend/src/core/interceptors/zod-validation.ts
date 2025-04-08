@@ -56,7 +56,9 @@ export class ZodValidationInterceptor implements NestInterceptor {
     return next.handle().pipe(
       map((response) => {
         if (responseSchema) {
-          const responseValidation = responseSchema.safeParse(response);
+          const arraySchema = responseSchema.array();
+          const schemaToUse = Array.isArray(response) ? arraySchema : responseSchema;
+          const responseValidation = schemaToUse.safeParse(response);
 
           if (!responseValidation.success) {
             throw new BadRequestException({

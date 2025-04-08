@@ -1,5 +1,6 @@
 export type Column = {
   name: string;
   title: string;
-  type?: 'Date' | 'Button';
+  type?: 'Date' | 'Link';
+  linkPath?: string;
 };

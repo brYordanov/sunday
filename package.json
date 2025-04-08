@@ -12,7 +12,7 @@
     "start:all": "concurrently 'npm run start:be-docker' 'npm run start:frontend'",
     "lint": "eslint **/*.ts",
     "format": "prettier --write **/*.{ts,html,scss}",
-    "update:validations": "cd libs/validations && rm -rf dist && tsc"
+    "update:validations": "cd libs/validations && rm -rf dist && npx tsc"
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,8 @@
   },
   "dependencies": {
     "axios": "^1.8.4",
-    "cheerio": "^1.0.0"
+    "cheerio": "^1.0.0",
+    "g": "^2.0.1",
+    "ts": "^0.2.2"
   }
 }

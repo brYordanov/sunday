@@ -1,0 +1,34 @@
+<div *ngIf="stockData$ | async as stock; else loading">
+  <h1>{{ stock.stockSymbolData.symbol }}</h1>
+  <h2>{{ stock.stockSymbolData.name }}</h2>
+  <h3>{{ stock.stockSymbolData.exchangeName }} ({{ stock.stockSymbolData.exchangeShortName }})</h3>
+  <p>Data from: {{ stock.analysedData.createdAt }}</p>
+  <mat-tab-group>
+    <mat-tab label="1 year">
+      <app-chart [id]="'1'" [chartData]="oneYearData$ | async"></app-chart>
+    </mat-tab>
+    <mat-tab label="5 years">
+      <ng-template matTabContent>
+        <app-chart [id]="'2'" [chartData]="fiveYearData$ | async"></app-chart>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="10 years">
+      <ng-template matTabContent>
+        <app-chart [id]="'3'" [chartData]="tenYearData$ | async"></app-chart>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="From Beginning">
+      <ng-template matTabContent>
+        <app-chart [id]="'4'" [chartData]="fromBeginningData$ | async"></app-chart>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+
+  <p>Term Analysis</p>
+</div>
+
+<ng-template #loading>
+  <div class="loader-container">
+    <app-loader></app-loader>
+  </div>
+</ng-template>

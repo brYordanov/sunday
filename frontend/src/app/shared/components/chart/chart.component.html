@@ -1,0 +1,14 @@
+<div class="chart-container">
+  <div id="stock-chart-{{ id }}" style="width: 100%; height: 500px"></div>
+  <mat-button-toggle-group
+    [value]="chartType"
+    [hideSingleSelectionIndicator]="true"
+    (change)="onChartTypeChange($event.value)"
+    name="chartType"
+    aria-label="Chart Type"
+  >
+    <mat-button-toggle value="candlestick">Candlestick</mat-button-toggle>
+    <mat-button-toggle value="line">Line</mat-button-toggle>
+    <mat-button-toggle value="area">Area</mat-button-toggle>
+  </mat-button-toggle-group>
+</div>

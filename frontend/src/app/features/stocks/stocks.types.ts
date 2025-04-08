@@ -1,3 +1,3 @@
 export type registerStockPayload = {
-  stockSymbol: string;
+  symbol: string;
 };
