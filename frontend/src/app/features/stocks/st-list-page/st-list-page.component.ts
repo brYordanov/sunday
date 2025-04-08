@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { StockService } from '../stocks.service';
 import { CommonModule } from '@angular/common';
-import { shareReplay, tap } from 'rxjs';
+import { tap } from 'rxjs';
 import { Column } from '../../../shared/components/info-table/info-table.types';
 import { InfoTableComponent } from '../../../shared/components/info-table/info-table.component';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';

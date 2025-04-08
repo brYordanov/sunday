@@ -2,6 +2,7 @@
   <h1>{{ stock.stockSymbolData.symbol }}</h1>
   <h2>{{ stock.stockSymbolData.name }}</h2>
   <h3>{{ stock.stockSymbolData.exchangeName }} ({{ stock.stockSymbolData.exchangeShortName }})</h3>
+  <p>Data from: {{ stock.analysedData.createdAt }}</p>
   <mat-tab-group>
     <mat-tab label="1 year">
       <app-chart [id]="'1'" [chartData]="oneYearData$ | async"></app-chart>
@@ -22,6 +23,8 @@
       </ng-template>
     </mat-tab>
   </mat-tab-group>
+
+  <p>Term Analysis</p>
 </div>
 
 <ng-template #loading>
