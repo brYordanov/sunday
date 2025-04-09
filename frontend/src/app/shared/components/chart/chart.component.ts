@@ -34,7 +34,7 @@ export class ChartComponent implements AfterViewInit {
       return;
     }
 
-    const styles = getComputedStyle(document.documentElement);
+    const styles = getComputedStyle(document.body);
     const bgColor = styles.getPropertyValue('--color-background')?.trim();
     const textColor = styles.getPropertyValue('--color-text')?.trim();
     const lineColor = styles.getPropertyValue('--color-accent-primary')?.trim();
@@ -139,10 +139,5 @@ export class ChartComponent implements AfterViewInit {
         mode: 'immediate',
       });
     });
-  }
-
-  getCurrentThemeStyles(): CSSStyleDeclaration {
-    const themeElement = document.body;
-    return getComputedStyle(themeElement);
   }
 }

@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ContainerComponent } from '../../shared/components/container/container.component';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
+import { ThemeService } from '../../core/services/theme-service';
 
 @Component({
   selector: 'app-header',
@@ -9,4 +10,10 @@ import { RouterModule } from '@angular/router';
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
-export class HeaderComponent {}
+export class HeaderComponent {
+  private readonly themeService = inject(ThemeService);
+
+  toggleTheme() {
+    this.themeService.toggleTheme();
+  }
+}
