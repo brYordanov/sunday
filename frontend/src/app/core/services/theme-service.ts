@@ -1,20 +1,21 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, tap } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
   private readonly htmlBody = document.body;
-  constructor(private router: Router) {
+  constructor(private router: Router, private cookieService: CookieService) {
     this.listenForRouteChanges();
   }
 
-  private readonly themeType1 = {
+  private readonly themeType1: ThemeGroup = {
     ['theme-1-light']: 'theme-1-light',
     ['theme-1-dark']: 'theme-1-dark',
   };
 
-  private readonly themeType2 = {
+  private readonly themeType2: ThemeGroup = {
     ['theme-2-light']: 'theme-2-light',
     ['theme-2-dark']: 'theme-2-dark',
   };
@@ -23,10 +24,10 @@ export class ThemeService {
     const rawBodyClass = this.htmlBody.className;
     const nextTheme = this.getNextTheme(rawBodyClass);
 
-    this.htmlBody.className = nextTheme;
+    this.setTheme(nextTheme);
   }
 
-  getNextTheme(rawClass: string): string {
+  getNextTheme(rawClass: string): Theme {
     const currentTheme: Theme = this.isValidTheme(rawClass) ? rawClass : 'theme-1-light';
 
     if (currentTheme in this.themeType1) {
@@ -46,7 +47,7 @@ export class ThemeService {
     document.body.className = theme;
     const themeType = theme.split('-')[2];
 
-    document.cookie = `theme=${themeType}; path=/; max-age=31536000`;
+    this.cookieService.set('theme', themeType, 365, '/');
   }
 
   private isValidTheme(value: string): value is Theme {
@@ -65,12 +66,23 @@ export class ThemeService {
   }
 
   private applyThemeForRoute(url: string) {
+    const previouslySetTheme = this.cookieService.get('theme');
+    let themeClass;
     if (url.startsWith('/crypto')) {
-      this.setTheme('theme-2-light');
+      themeClass =
+        previouslySetTheme === 'dark'
+          ? this.themeType2['theme-2-dark']
+          : this.themeType2['theme-2-light'];
     } else {
-      this.setTheme('theme-1-light');
+      themeClass =
+        previouslySetTheme === 'dark'
+          ? this.themeType1['theme-1-dark']
+          : this.themeType1['theme-1-light'];
     }
+
+    this.setTheme(themeClass);
   }
 }
 
 type Theme = 'theme-1-light' | 'theme-1-dark' | 'theme-2-light' | 'theme-2-dark';
+type ThemeGroup = Record<string, Theme>;
