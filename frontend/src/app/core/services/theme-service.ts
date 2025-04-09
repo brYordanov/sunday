@@ -1,13 +1,22 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, tap } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
-  private readonly htmlBody = document.body;
-  constructor(private router: Router, private cookieService: CookieService) {
-    this.listenForRouteChanges();
+  private htmlBody: HTMLElement | null = null;
+  constructor(
+    private router: Router,
+    private cookieService: CookieService,
+    @Inject(DOCUMENT) private document: Document,
+    @Inject(PLATFORM_ID) private platformId: Object,
+  ) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.htmlBody = this.document.body;
+      this.listenForRouteChanges();
+    }
   }
 
   private readonly themeType1: ThemeGroup = {
@@ -21,6 +30,7 @@ export class ThemeService {
   };
 
   toggleTheme(): void {
+    if (!this.htmlBody) return;
     const rawBodyClass = this.htmlBody.className;
     const nextTheme = this.getNextTheme(rawBodyClass);
 
@@ -44,6 +54,7 @@ export class ThemeService {
   }
 
   setTheme(theme: Theme) {
+    if (!this.htmlBody) return;
     document.body.className = theme;
     const themeType = theme.split('-')[2];
 

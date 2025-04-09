@@ -1,7 +1,8 @@
-import { AfterViewInit, Component, Input } from '@angular/core';
+import { AfterViewInit, Component, inject, Input, PLATFORM_ID } from '@angular/core';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import Plotly from 'plotly.js-dist';
 import { ChartData } from './chart.types';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-chart',
@@ -12,6 +13,7 @@ import { ChartData } from './chart.types';
 export class ChartComponent implements AfterViewInit {
   @Input() chartData: ChartData | null = null;
   @Input() id: string = '';
+  platformId = inject(PLATFORM_ID);
 
   chartType: 'candlestick' | 'line' | 'area' = 'candlestick';
 
@@ -20,6 +22,7 @@ export class ChartComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    if (isPlatformBrowser(this.platformId)) return;
     this.renderChart();
   }
 
