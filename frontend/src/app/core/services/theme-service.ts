@@ -1,8 +1,13 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter, tap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
   private readonly htmlBody = document.body;
+  constructor(private router: Router) {
+    this.listenForRouteChanges();
+  }
 
   private readonly themeType1 = {
     ['theme-1-light']: 'theme-1-light',
@@ -37,18 +42,34 @@ export class ThemeService {
     throw Error('something went wront');
   }
 
-  //   setTheme(theme: 'light' | 'dark'): void {
-  //     const className = this.themes[theme];
-  //     this.htmlElement.className = className;
-  //     document.body.className = className;
-  //   }
+  setTheme(theme: Theme) {
+    document.body.className = theme;
+    const themeType = theme.split('-')[2];
 
-  //   getCurrentTheme(): 'light' | 'dark' {
-  //     return this.htmlElement.className === this.themes.dark ? 'dark' : 'light';
-  //   }
+    document.cookie = `theme=${themeType}; path=/; max-age=31536000`;
+  }
 
   private isValidTheme(value: string): value is Theme {
     return ['theme-1-light', 'theme-1-dark', 'theme-2-light', 'theme-2-dark'].includes(value);
+  }
+
+  private listenForRouteChanges() {
+    this.router.events
+      .pipe(
+        filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+        tap((e) => {
+          this.applyThemeForRoute(e.urlAfterRedirects);
+        }),
+      )
+      .subscribe();
+  }
+
+  private applyThemeForRoute(url: string) {
+    if (url.startsWith('/crypto')) {
+      this.setTheme('theme-2-light');
+    } else {
+      this.setTheme('theme-1-light');
+    }
   }
 }
 

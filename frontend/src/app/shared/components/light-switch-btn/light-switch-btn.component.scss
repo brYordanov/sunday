@@ -1,0 +1,37 @@
+.light-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 7px;
+  color: var(--color-background);
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.ray-container {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  transform: translateX(-50%);
+
+  :nth-child(1) {
+    transform: rotate(30deg) translate(7px, -7px);
+  }
+
+  :nth-child(3) {
+    transform: rotate(-30deg) translate(-7px, -7px);
+  }
+}
+
+.light-ray {
+  display: block;
+  top: 100%;
+  width: 2px;
+  height: 7px;
+  border-radius: 20px;
+  background-color: var(--color-background);
+}

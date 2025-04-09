@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InvestmentsComponent } from './investments.component';
+import { CrListPageComponent } from './cr-list-page.component';
 
-describe('InvestmentsComponent', () => {
-  let component: InvestmentsComponent;
-  let fixture: ComponentFixture<InvestmentsComponent>;
+describe('CrListPageComponent', () => {
+  let component: CrListPageComponent;
+  let fixture: ComponentFixture<CrListPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [InvestmentsComponent]
+      imports: [CrListPageComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(InvestmentsComponent);
+    fixture = TestBed.createComponent(CrListPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
