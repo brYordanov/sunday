@@ -4,6 +4,7 @@ import express from 'express';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import bootstrap from './main.server';
+import cookieParser from 'cookie-parser';
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
@@ -11,6 +12,8 @@ const indexHtml = join(serverDistFolder, 'index.server.html');
 
 const app = express();
 const commonEngine = new CommonEngine();
+
+app.use(cookieParser());
 
 /**
  * Example Express Rest API endpoints can be defined here.
@@ -25,13 +28,12 @@ const commonEngine = new CommonEngine();
  */
 
 /**
- * Serve static files from /browser
+ * Serve static files *first* ONLY for files that exist — NOT with `**`
  */
-app.get(
-  '**',
+app.use(
   express.static(browserDistFolder, {
     maxAge: '1y',
-    index: 'index.html',
+    index: false,
   }),
 );
 
@@ -42,7 +44,9 @@ app.get('**', (req, res, next) => {
   const { protocol, originalUrl, baseUrl, headers } = req;
   const isCrypto = originalUrl.startsWith('/crypto');
   const themeClassBase = isCrypto ? 'theme-2' : 'theme-1';
-  console.log(themeClassBase);
+  const cookieTheme = req.cookies.theme;
+
+  const fullTheme = cookieTheme ? `${themeClassBase}-${cookieTheme}` : `${themeClassBase}-light`;
 
   commonEngine
     .render({
@@ -52,7 +56,10 @@ app.get('**', (req, res, next) => {
       publicPath: browserDistFolder,
       providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
     })
-    .then((html) => res.send(html))
+    .then((html) => {
+      const htmlWithTheme = html.replace(/<body([^>]*)>/, `<body$1 class="${fullTheme}">`);
+      res.send(htmlWithTheme);
+    })
     .catch((err) => next(err));
 });
 

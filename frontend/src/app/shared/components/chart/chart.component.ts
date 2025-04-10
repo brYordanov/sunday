@@ -20,10 +20,6 @@ export class ChartComponent implements AfterViewInit {
 
   chartType: 'candlestick' | 'line' | 'area' = 'candlestick';
 
-  ngOnInit(): void {
-    console.log(this.id);
-  }
-
   ngAfterViewInit(): void {
     if (!isPlatformBrowser(this.platformId)) return;
     this.themeService.theme$.pipe(tap(() => this.renderChart())).subscribe();
