@@ -31,7 +31,7 @@ app.get(
   '**',
   express.static(browserDistFolder, {
     maxAge: '1y',
-    index: 'index.html'
+    index: 'index.html',
   }),
 );
 
@@ -40,6 +40,9 @@ app.get(
  */
 app.get('**', (req, res, next) => {
   const { protocol, originalUrl, baseUrl, headers } = req;
+  const isCrypto = originalUrl.startsWith('/crypto');
+  const themeClassBase = isCrypto ? 'theme-2' : 'theme-1';
+  console.log(themeClassBase);
 
   commonEngine
     .render({

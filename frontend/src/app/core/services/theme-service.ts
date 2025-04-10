@@ -1,12 +1,22 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { filter, tap } from 'rxjs';
+import { BehaviorSubject, filter, tap } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+
+const themeType1: ThemeGroup = {
+  ['theme-1-light']: 'theme-1-light',
+  ['theme-1-dark']: 'theme-1-dark',
+};
+const themeType2: ThemeGroup = {
+  ['theme-2-light']: 'theme-2-light',
+  ['theme-2-dark']: 'theme-2-dark',
+};
 
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
   private htmlBody: HTMLElement | null = null;
+  theme$: BehaviorSubject<Theme> = new BehaviorSubject(themeType1['theme-1-light']);
   constructor(
     private router: Router,
     private cookieService: CookieService,
@@ -19,16 +29,6 @@ export class ThemeService {
     }
   }
 
-  private readonly themeType1: ThemeGroup = {
-    ['theme-1-light']: 'theme-1-light',
-    ['theme-1-dark']: 'theme-1-dark',
-  };
-
-  private readonly themeType2: ThemeGroup = {
-    ['theme-2-light']: 'theme-2-light',
-    ['theme-2-dark']: 'theme-2-dark',
-  };
-
   toggleTheme(): void {
     if (!this.htmlBody) return;
     const rawBodyClass = this.htmlBody.className;
@@ -40,12 +40,12 @@ export class ThemeService {
   getNextTheme(rawClass: string): Theme {
     const currentTheme: Theme = this.isValidTheme(rawClass) ? rawClass : 'theme-1-light';
 
-    if (currentTheme in this.themeType1) {
+    if (currentTheme in themeType1) {
       const nextTheme = currentTheme === 'theme-1-light' ? 'theme-1-dark' : 'theme-1-light';
       return nextTheme;
     }
 
-    if (currentTheme in this.themeType2) {
+    if (currentTheme in themeType2) {
       const nextTheme = currentTheme === 'theme-2-light' ? 'theme-2-dark' : 'theme-2-light';
       return nextTheme;
     }
@@ -55,6 +55,7 @@ export class ThemeService {
 
   setTheme(theme: Theme) {
     if (!this.htmlBody) return;
+    this.theme$.next(theme);
     document.body.className = theme;
     const themeType = theme.split('-')[2];
 
@@ -81,14 +82,10 @@ export class ThemeService {
     let themeClass;
     if (url.startsWith('/crypto')) {
       themeClass =
-        previouslySetTheme === 'dark'
-          ? this.themeType2['theme-2-dark']
-          : this.themeType2['theme-2-light'];
+        previouslySetTheme === 'dark' ? themeType2['theme-2-dark'] : themeType2['theme-2-light'];
     } else {
       themeClass =
-        previouslySetTheme === 'dark'
-          ? this.themeType1['theme-1-dark']
-          : this.themeType1['theme-1-light'];
+        previouslySetTheme === 'dark' ? themeType1['theme-1-dark'] : themeType1['theme-1-light'];
     }
 
     this.setTheme(themeClass);
