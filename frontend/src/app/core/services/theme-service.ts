@@ -55,6 +55,7 @@ export class ThemeService {
 
   setTheme(theme: Theme) {
     if (!this.htmlBody) return;
+
     this.theme$.next(theme);
     document.body.className = theme;
     const themeType = theme.split('-')[2];

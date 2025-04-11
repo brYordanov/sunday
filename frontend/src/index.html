@@ -1,8 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <script>
+      (function () {
+        try {
+          const isCrypto = window.location.pathname.startsWith('/crypto');
+          const base = isCrypto ? 'theme-2' : 'theme-1';
+
+          // Read from cookies (you can improve this)
+          const cookieTheme = document.cookie
+            .split('; ')
+            .find((row) => row.startsWith('theme='))
+            ?.split('=')[1];
+
+          const theme = cookieTheme ? `${base}-${cookieTheme}` : `${base}-light`;
+
+          document.body.classList.add(theme);
+        } catch (e) {
+          console.warn('Theme preload script failed', e);
+        }
+      })();
+    </script>
     <meta charset="utf-8" />
-    <title>Frontend</title>
+    <title>Sunday</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
@@ -24,6 +44,52 @@
     />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   </head>
+  <style>
+    :root,
+    .theme-1-light {
+      --color-background: #f9fafb;
+      --color-accent-primary: #2980b9;
+      --color-accent-secondary: #2c3e50;
+      --color-text: #1a1a1a;
+      --color-success: #2ecc71;
+      --color-error: #e74c3c;
+      --font-primary: 'Inter', sans-serif;
+      --font-secondary: 'Roboto', sans-serif;
+    }
+
+    .theme-1-dark {
+      --color-background: #121212;
+      --color-accent-primary: #3498db;
+      --color-accent-secondary: #00cec9;
+      --color-text: #e0e0e0;
+      --color-success: #27ae60;
+      --color-error: #c0392b;
+      --font-primary: 'Inter', sans-serif;
+      --font-secondary: 'Roboto', sans-serif;
+    }
+
+    .theme-2-light {
+      --color-background: #f5f7fa;
+      --color-accent-primary: #6c5ce7;
+      --color-accent-secondary: #00cec9;
+      --color-text: #1c1c1c;
+      --color-success: #00b894;
+      --color-error: #d63031;
+      --font-primary: 'Orbitron', sans-serif;
+      --font-secondary: 'DM Mono', monospace;
+    }
+
+    .theme-2-dark {
+      --color-background: #0b0f1a;
+      --color-accent-primary: #8e44ad;
+      --color-accent-secondary: #f9ca24;
+      --color-text: #f0f0f0;
+      --color-success: #00ffab;
+      --color-error: #ff4e50;
+      --font-primary: 'Orbitron', sans-serif;
+      --font-secondary: 'DM Mono', monospace;
+    }
+  </style>
   <body>
     <app-root></app-root>
   </body>
