@@ -32,17 +32,3 @@ body {
   box-sizing: border-box;
   margin: 0;
 }
-
-.theme-1-dark,
-.theme-2-dark {
-  .light-theme-only {
-    display: none !important;
-  }
-}
-
-.theme-1-light,
-.theme-2-light {
-  .dark-theme-only {
-    display: none !important;
-  }
-}
