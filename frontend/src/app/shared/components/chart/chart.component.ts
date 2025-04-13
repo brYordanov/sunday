@@ -3,6 +3,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { ChartData } from './chart.types';
 import { isPlatformBrowser } from '@angular/common';
 import type * as PlotlyJS from 'plotly.js';
+
 import { ThemeService } from '../../../core/services/theme-service';
 import { tap } from 'rxjs';
 
@@ -17,11 +18,12 @@ export class ChartComponent implements AfterViewInit {
   @Input() id: string = '';
   platformId = inject(PLATFORM_ID);
   themeService = inject(ThemeService);
+  isBrowser = isPlatformBrowser(this.platformId);
 
   chartType: 'candlestick' | 'line' | 'area' = 'candlestick';
 
   ngAfterViewInit(): void {
-    if (!isPlatformBrowser(this.platformId)) return;
+    if (!this.isBrowser) return;
     this.themeService.theme$.pipe(tap(() => this.renderChart())).subscribe();
     this.renderChart();
   }
@@ -32,7 +34,8 @@ export class ChartComponent implements AfterViewInit {
   }
 
   private async renderChart(): Promise<void> {
-    const Plotly = await import('plotly.js-dist');
+    if (!this.isBrowser) return;
+    const { default: Plotly } = await import('plotly.js-dist-min');
 
     if (!this.chartData) {
       console.error('Chart data is not provided');
@@ -112,7 +115,7 @@ export class ChartComponent implements AfterViewInit {
         name: 'Close Price',
       };
 
-      if (totalFrames > 12) {
+      if (totalFrames > 120) {
         Plotly.react(`stock-chart-${this.id}`, [trace], layout);
         return;
       }
@@ -127,8 +130,8 @@ export class ChartComponent implements AfterViewInit {
     x: string[],
     y: number[],
   ) {
-    const Plotly = await import('plotly.js-dist');
-
+    if (!this.isBrowser) return;
+    const { default: Plotly } = await import('plotly.js-dist-min');
     const initialTrace = {
       ...trace,
       x: [],
@@ -137,6 +140,7 @@ export class ChartComponent implements AfterViewInit {
 
     Plotly.react(`stock-chart-${this.id}`, [initialTrace], layout).then(() => {
       const frames = x.map((_, i) => ({
+        name: `frame-${i}`,
         data: [
           {
             x: x.slice(0, i + 1),
@@ -146,10 +150,21 @@ export class ChartComponent implements AfterViewInit {
       }));
 
       Plotly.animate(`stock-chart-${this.id}`, frames, {
-        frame: { duration: 5, redraw: true },
+        frame: { duration: this.getFrameAnimationSpeed(frames), redraw: true },
         transition: { duration: 0 },
         mode: 'immediate',
       });
     });
+  }
+
+  private getFrameAnimationSpeed(frames: Partial<PlotlyJS.Frame>[]): number {
+    const totalFrames = frames.length;
+    if (totalFrames <= 12) {
+      return 20;
+    } else if (totalFrames <= 60) {
+      return 10;
+    } else {
+      return 5;
+    }
   }
 }
