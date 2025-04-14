@@ -1,11 +1,11 @@
-import { AfterViewInit, Component, inject, Input, PLATFORM_ID } from '@angular/core';
+import { AfterViewInit, Component, inject, Input, NgZone, PLATFORM_ID } from '@angular/core';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { ChartData } from './chart.types';
 import { isPlatformBrowser } from '@angular/common';
 import type * as PlotlyJS from 'plotly.js';
 
 import { ThemeService } from '../../../core/services/theme-service';
-import { tap } from 'rxjs';
+import { take, tap } from 'rxjs';
 
 @Component({
   selector: 'app-chart',
@@ -16,6 +16,7 @@ import { tap } from 'rxjs';
 export class ChartComponent implements AfterViewInit {
   @Input() chartData: ChartData | null = null;
   @Input() id: string = '';
+  private ngZone = inject(NgZone);
   platformId = inject(PLATFORM_ID);
   themeService = inject(ThemeService);
   isBrowser = isPlatformBrowser(this.platformId);
@@ -24,8 +25,15 @@ export class ChartComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     if (!this.isBrowser) return;
-    this.themeService.theme$.pipe(tap(() => this.renderChart())).subscribe();
-    this.renderChart();
+    this.ngZone.onStable
+      .pipe(
+        take(1),
+        tap(() => {
+          this.themeService.theme$.pipe(tap(() => this.renderChart())).subscribe();
+          this.renderChart();
+        }),
+      )
+      .subscribe();
   }
 
   onChartTypeChange(type: 'candlestick' | 'line' | 'area'): void {
@@ -35,6 +43,11 @@ export class ChartComponent implements AfterViewInit {
 
   private async renderChart(): Promise<void> {
     if (!this.isBrowser) return;
+    const chartDiv = document.getElementById(`stock-chart-${this.id}`);
+    if (!chartDiv) {
+      console.warn(`Chart container #stock-chart-${this.id} not found`);
+      return;
+    }
     const { default: Plotly } = await import('plotly.js-dist-min');
 
     if (!this.chartData) {
@@ -42,7 +55,7 @@ export class ChartComponent implements AfterViewInit {
       return;
     }
 
-    const styles = getComputedStyle(document.documentElement);
+    const styles = getComputedStyle(document.body);
     const bgColor = styles.getPropertyValue('--color-background')?.trim();
     const textColor = styles.getPropertyValue('--color-text')?.trim();
     const lineColor = styles.getPropertyValue('--color-accent-primary')?.trim();
