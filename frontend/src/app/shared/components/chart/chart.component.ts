@@ -20,6 +20,7 @@ export class ChartComponent implements AfterViewInit {
   platformId = inject(PLATFORM_ID);
   themeService = inject(ThemeService);
   isBrowser = isPlatformBrowser(this.platformId);
+  private hasRenderedOnce = false;
 
   chartType: 'candlestick' | 'line' | 'area' = 'candlestick';
 
@@ -131,7 +132,12 @@ export class ChartComponent implements AfterViewInit {
         return;
       }
 
-      this.renderWithAnimation(trace, layout, x, y);
+      if (this.hasRenderedOnce) {
+        Plotly.react(`stock-chart-${this.id}`, [trace], layout, { responsive: true });
+      } else {
+        this.renderWithAnimation(trace, layout, x, y);
+        this.hasRenderedOnce = true;
+      }
     }
   }
 
