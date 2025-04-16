@@ -5,7 +5,7 @@ import { isPlatformBrowser } from '@angular/common';
 import type * as PlotlyJS from 'plotly.js';
 
 import { ThemeService } from '../../../core/services/theme-service';
-import { take, tap } from 'rxjs';
+import { switchMap, take, tap } from 'rxjs';
 
 @Component({
   selector: 'app-chart',
@@ -28,10 +28,8 @@ export class ChartComponent implements AfterViewInit {
     this.ngZone.onStable
       .pipe(
         take(1),
-        tap(() => {
-          this.themeService.theme$.pipe(tap(() => this.renderChart())).subscribe();
-          this.renderChart();
-        }),
+        switchMap(() => this.themeService.theme$),
+        tap(() => this.renderChart()),
       )
       .subscribe();
   }

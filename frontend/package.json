@@ -8,11 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:frontend": "node dist/frontend/server/server.mjs",
-    "dev:ssr": "concurrently \"npm run dev:build:ssr\" \"npm run dev:serve:ssr\"",
-    "dev:build:ssr": "ng build --watch",
-    "dev:serve:ssr": "nodemon --watch dist/server --exec \"node dist/frontend/server/server.mjs\"",
-    "dev:build:server": "ng run frontend:server:development --watch",
-    "dev:client": "ng serve"
+    "dev:ssr": "concurrently \"npm run watch\" \"nodemon --watch dist/frontend/server --watch dist/frontend/browser -e js,mjs,css,html --exec \\\"npm run serve:ssr:frontend\\\"\""
   },
   "private": true,
   "dependencies": {
