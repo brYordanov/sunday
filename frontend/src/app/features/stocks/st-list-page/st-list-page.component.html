@@ -1,17 +1,3 @@
-<form [formGroup]="stockRegisterForm" (ngSubmit)="onSubmit()" class="form">
-  <app-search-bar
-    [control]="stockRegisterForm.controls.symbol"
-    [label]="'Stock Symbol'"
-    [styleVariation]="'fullWidth'"
-    [type]="'autocomplete'"
-    [onInput]="onInputSearchBar"
-    [options]="options$ | async"
-  ></app-search-bar>
-  <div class="btn-container">
-    <button mat-flat-button color="primary" type="submit" [disabled]="stockRegisterForm.invalid">
-      Add to watch list
-    </button>
-    <app-loader *ngIf="isLoading" [type]="'overlay'"></app-loader>
-  </div>
-</form>
+<!-- <app-register-stock-form></app-register-stock-form> -->
+<app-filter-stock-form></app-filter-stock-form>
 <app-info-table [data$]="stocksData" [columns]="tableColumns"></app-info-table>
