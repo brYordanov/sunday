@@ -2,7 +2,10 @@
   <app-search-bar
     [control]="stockRegisterForm.controls.symbol"
     [label]="'Stock Symbol'"
-    [variation]="'fullWidth'"
+    [styleVariation]="'fullWidth'"
+    [type]="'autocomplete'"
+    [onInput]="onInputSearchBar"
+    [options]="options$ | async"
   ></app-search-bar>
   <div class="btn-container">
     <button mat-flat-button color="primary" type="submit" [disabled]="stockRegisterForm.invalid">

@@ -3,7 +3,11 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, shareReplay, switchMap } from 'rxjs';
 import { API_URL } from '../../../../env';
 import { registerStockPayload } from './stocks.types';
-import { DetailedStockInfoDto, StockDto } from '@sunday/validations';
+import {
+  DetailedStockInfoDto,
+  StockDto,
+  StockSymbolPaginatedResponceDto,
+} from '@sunday/validations';
 
 @Injectable({
   providedIn: 'root',
@@ -28,5 +32,11 @@ export class StockService {
 
   getDetailedStockInfo(stockSymbol: string): Observable<DetailedStockInfoDto> {
     return this.http.get<DetailedStockInfoDto>(`${API_URL}/stocks/detailed?symbol=${stockSymbol}`);
+  }
+
+  getStockSymbols(query: string): Observable<StockSymbolPaginatedResponceDto> {
+    return this.http.get<StockSymbolPaginatedResponceDto>(
+      `${API_URL}/stock-symbols?query=${query}`,
+    );
   }
 }

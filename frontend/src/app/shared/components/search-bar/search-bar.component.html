@@ -1,4 +1,24 @@
-<mat-form-field [ngClass]="{ 'full-width': variation === 'fullWidth' }">
-  <mat-label>{{ label }}</mat-label>
-  <input matInput [formControl]="control" />
-</mat-form-field>
+<ng-container *ngIf="type === 'default'">
+  <mat-form-field [ngClass]="{ 'full-width': styleVariation === 'fullWidth' }">
+    <mat-label>{{ label }}</mat-label>
+    <input matInput [formControl]="control" #inputElement (input)="onInput(inputElement.value)" />
+  </mat-form-field>
+</ng-container>
+
+<ng-container *ngIf="type === 'autocomplete'">
+  <mat-form-field [ngClass]="{ 'full-width': styleVariation === 'fullWidth' }">
+    <mat-label>{{ label }}</mat-label>
+    <input
+      matInput
+      #inputElement
+      [formControl]="control"
+      [matAutocomplete]="auto"
+      (input)="onInput(inputElement.value)"
+    />
+    <mat-autocomplete #auto="matAutocomplete" requireSelection>
+      @for (option of options; track option) {
+      <mat-option [value]="option">{{ option }}</mat-option>
+      }
+    </mat-autocomplete>
+  </mat-form-field>
+</ng-container>
