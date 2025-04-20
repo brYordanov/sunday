@@ -1,7 +1,15 @@
 import { Component, inject } from '@angular/core';
 import { StockService } from '../stocks.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { BehaviorSubject, debounceTime, distinctUntilChanged, map, switchMap, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  shareReplay,
+  switchMap,
+  tap,
+} from 'rxjs';
 import { SearchBarComponent } from '../../../shared/components/search-bar/search-bar.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,6 +17,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarComponent } from '../../../shared/components/snackbar/snackbar.component';
 
 @Component({
   selector: 'app-register-stock-form',
@@ -26,6 +36,7 @@ import { LoaderComponent } from '../../../shared/components/loader/loader.compon
 })
 export class RegisterStockFormComponent {
   private stockService = inject(StockService);
+  snackBar = inject(MatSnackBar);
   private registerBarInput$ = new BehaviorSubject<string>('');
   isLoading = false;
 
@@ -43,15 +54,22 @@ export class RegisterStockFormComponent {
       this.stockService
         .registerStock({ symbol })
         .pipe(
-          tap(() => {
-            this.isLoading = false;
-            this.stockService.refreshStocks();
-            this.stockRegisterForm.reset();
-            this.stockRegisterForm.reset({ symbol: '' });
-            this.stockRegisterForm.markAsPristine();
-            this.stockRegisterForm.markAsUntouched();
-            this.stockRegisterForm.get('symbol')?.setErrors(null);
+          tap({
+            next: () => {
+              this.isLoading = false;
+              this.stockService.refreshStocks();
+              this.stockRegisterForm.reset({ symbol: '' });
+              this.stockRegisterForm.markAsPristine();
+              this.stockRegisterForm.markAsUntouched();
+              this.stockRegisterForm.get('symbol')?.setErrors(null);
+              this.showSuccessMessage();
+            },
+            error: () => {
+              this.isLoading = false;
+              this.showErrorMessage();
+            },
           }),
+          shareReplay(1),
         )
         .subscribe();
     }
@@ -68,4 +86,20 @@ export class RegisterStockFormComponent {
   onInputRegisterBar = (value: string) => {
     this.registerBarInput$.next(value);
   };
+
+  showSuccessMessage() {
+    this.snackBar.openFromComponent(SnackbarComponent, {
+      data: { message: 'Registered stock successfully!', icon: 'check' },
+      duration: 1000,
+      panelClass: ['success-snackbar'],
+    });
+  }
+
+  showErrorMessage() {
+    this.snackBar.openFromComponent(SnackbarComponent, {
+      data: { message: 'Something went wrong!', icon: 'priority_high' },
+      duration: 1000,
+      panelClass: ['error-snackbar'],
+    });
+  }
 }

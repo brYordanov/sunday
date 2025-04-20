@@ -46,3 +46,10 @@ body {
   --breakpoint-xl: 1400px;
   --breakpoint-xxl: 1600px;
 }
+
+.success-snackbar {
+  .mat-mdc-snackbar-surface {
+    background-color: var(--color-success) !important;
+    color: var(--color-background) !important;
+  }
+}
