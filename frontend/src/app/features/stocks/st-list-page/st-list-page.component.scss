@@ -1,16 +1,22 @@
-.form {
-  position: relative;
+.option-header {
+  display: flex;
+  gap: 10px;
 }
 
-.btn-container {
-  position: absolute;
-  top: 50%;
-  right: 0;
-  height: 100%;
-  transform: translateY(-50%);
+.option-content {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
 
-  button {
-    border-radius: 0;
-    height: 100%;
-  }
+.options-container {
+  display: block;
+  padding: 20px 0;
+}
+
+.no-stocks {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

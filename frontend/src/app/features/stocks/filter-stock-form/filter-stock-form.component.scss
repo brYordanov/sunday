@@ -1,0 +1,35 @@
+.form {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.search-btn {
+  width: 120px;
+  padding: 0;
+  min-width: 0;
+  border-color: var(--color-accent-primary) !important;
+
+  @media (max-width: var(--breakpoint-sm)) {
+    max-width: 120px;
+  }
+}
+
+.clear-btn {
+  border-color: var(--color-accent-primary) !important;
+}
+
+.date-field {
+  border-radius: var(--border-radius-primary);
+  width: 170px;
+}
+
+.input-field {
+  border-radius: var(--border-radius-primary);
+  width: 150px;
+}
+
+app-tooltip {
+  width: fit-content;
+}

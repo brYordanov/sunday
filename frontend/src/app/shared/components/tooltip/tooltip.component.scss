@@ -1,0 +1,47 @@
+.tooltip-btn {
+  position: relative;
+  border: 0;
+  width: fit-content;
+  background-color: transparent;
+  cursor: pointer;
+
+  ::ng-deep [tooltip-icon] {
+    width: 30px;
+    height: 30px;
+    font-size: 30px;
+    color: var(--color-accent-primary);
+    transition: filter 0.2s ease;
+  }
+
+  ::ng-deep [tooltip-text] {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    display: block;
+    min-width: 200px;
+    padding: 6px 10px;
+    color: var(--color-text);
+    border: var(--color-text) solid 1px;
+    border-radius: 4px;
+    background-color: var(--color-background);
+    font-size: 13px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    transform: translateX(-50%) translateY(5px);
+    transform: translateX(-50%);
+    z-index: 10;
+  }
+
+  &:hover,
+  &:focus {
+    ::ng-deep [tooltip-icon] {
+      filter: grayscale(50%);
+    }
+
+    ::ng-deep [tooltip-text] {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+}

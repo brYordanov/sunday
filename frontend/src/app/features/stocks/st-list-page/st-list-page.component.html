@@ -1,14 +1,39 @@
-<form [formGroup]="stockRegisterForm" (ngSubmit)="onSubmit()" class="form">
-  <app-search-bar
-    [control]="stockRegisterForm.controls.symbol"
-    [label]="'Stock Symbol'"
-    [variation]="'fullWidth'"
-  ></app-search-bar>
-  <div class="btn-container">
-    <button mat-flat-button color="primary" type="submit" [disabled]="stockRegisterForm.invalid">
-      Add to watch list
-    </button>
-    <app-loader *ngIf="isLoading" [type]="'overlay'"></app-loader>
-  </div>
-</form>
-<app-info-table [data$]="stocksData" [columns]="tableColumns"></app-info-table>
+<mat-accordion class="example-headers-align options-container" multi>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title class="option-header">
+        Filter Stocks
+        <mat-icon>tune</mat-icon>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="option-content">
+      <app-filter-stock-form></app-filter-stock-form>
+      <app-tooltip>
+        <mat-icon tooltip-icon>help</mat-icon>
+        <span tooltip-text>
+          Can't find what you are looking for? Try registering the stock first.
+        </span>
+      </app-tooltip>
+      <p class="helper-text">Search among stocks you're already monitoring</p>
+    </div>
+  </mat-expansion-panel>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title class="option-header">
+        Register Strocks
+
+        <mat-icon>library_add</mat-icon>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-register-stock-form></app-register-stock-form>
+    <p class="helper-text">Register a stock to start monitoring and get analysis</p>
+  </mat-expansion-panel>
+</mat-accordion>
+<ng-container *ngIf="stocksData$ | async as stocksData">
+  <ng-container *ngIf="stocksData.length > 0; else noStocks">
+    <app-info-table [data$]="stocksData$" [columns]="tableColumns"></app-info-table>
+  </ng-container>
+  <ng-template #noStocks>
+    <p class="no-stocks">No stocks found</p>
+  </ng-template>
+</ng-container>

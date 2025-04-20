@@ -1,33 +1,32 @@
-import { Component, inject } from '@angular/core';
-import { SearchBarComponent } from '../../../shared/components/search-bar/search-bar.component';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
+import { Component, inject, viewChild } from '@angular/core';
 import { StockService } from '../stocks.service';
 import { CommonModule } from '@angular/common';
-import { tap } from 'rxjs';
 import { Column } from '../../../shared/components/info-table/info-table.types';
 import { InfoTableComponent } from '../../../shared/components/info-table/info-table.component';
-import { LoaderComponent } from '../../../shared/components/loader/loader.component';
+import { RegisterStockFormComponent } from '../register-stock-form/register-stock-form.component';
+import { FilterStockFormComponent } from '../filter-stock-form/filter-stock-form.component';
+import { TooltipComponent } from '../../../shared/components/tooltip/tooltip.component';
+import { MatIcon } from '@angular/material/icon';
+import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-stocks',
   imports: [
-    SearchBarComponent,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
     CommonModule,
     InfoTableComponent,
-    LoaderComponent,
+    RegisterStockFormComponent,
+    FilterStockFormComponent,
+    TooltipComponent,
+    MatIcon,
+    MatExpansionModule,
   ],
   templateUrl: './st-list-page.component.html',
   styleUrl: './st-list-page.component.scss',
 })
 export class StocksListComponent {
   private stockService = inject(StockService);
+  accordion = viewChild.required(MatAccordion);
+
   isLoading = false;
   tableColumns: Column[] = [
     {
@@ -52,33 +51,5 @@ export class StocksListComponent {
     },
   ];
 
-  stockRegisterForm = new FormGroup({
-    symbol: new FormControl('', {
-      nonNullable: true,
-      validators: Validators.required,
-    }),
-  });
-
-  stocksData = this.stockService.stocks$;
-
-  onSubmit() {
-    if (this.stockRegisterForm.valid) {
-      const symbol = this.stockRegisterForm.value.symbol!;
-      this.isLoading = true;
-      this.stockService
-        .registerStock({ symbol })
-        .pipe(
-          tap(() => {
-            this.isLoading = false;
-            this.stockService.refreshStocks();
-            this.stockRegisterForm.reset();
-            this.stockRegisterForm.reset({ symbol: '' });
-            this.stockRegisterForm.markAsPristine();
-            this.stockRegisterForm.markAsUntouched();
-            this.stockRegisterForm.get('symbol')?.setErrors(null);
-          }),
-        )
-        .subscribe();
-    }
-  }
+  stocksData$ = this.stockService.stocks$;
 }
