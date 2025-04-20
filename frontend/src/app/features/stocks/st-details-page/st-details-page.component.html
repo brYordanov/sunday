@@ -1,8 +1,12 @@
 <div *ngIf="stockData$ | async as stock; else loading">
-  <h1>{{ stock.stockSymbolData.symbol }}</h1>
-  <h2>{{ stock.stockSymbolData.name }}</h2>
-  <h3>{{ stock.stockSymbolData.exchangeName }} ({{ stock.stockSymbolData.exchangeShortName }})</h3>
-  <p>Data from: {{ stock.analysedData.createdAt }}</p>
+  <div class="info-container">
+    <h1>{{ stock.stockSymbolData.symbol }}</h1>
+    <h2>{{ stock.stockSymbolData.name }}</h2>
+    <h3>
+      {{ stock.stockSymbolData.exchangeName }} ({{ stock.stockSymbolData.exchangeShortName }})
+    </h3>
+    <p>Data from: {{ stock.analysedData.createdAt }}</p>
+  </div>
   <mat-tab-group>
     <mat-tab label="1 year">
       <app-chart [id]="'1'" [chartData]="oneYearData$ | async"></app-chart>
