@@ -9,15 +9,15 @@
   width: 120px;
   padding: 0;
   min-width: 0;
-  border-color: var(--color-accent-primary);
+  border-color: var(--color-accent-primary) !important;
 
-  @media (max-width: 720px) {
+  @media (max-width: var(--breakpoint-sm)) {
     max-width: 120px;
   }
 }
 
 .clear-btn {
-  border-color: var(--color-accent-primary);
+  border-color: var(--color-accent-primary) !important;
 }
 
 .date-field {

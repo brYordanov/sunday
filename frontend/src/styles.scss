@@ -38,4 +38,11 @@ body {
 :root {
   --border-radius-primary: 20px;
   --border-radius-secondary: 0;
+
+  --breakpoint-smallest: 0;
+  --breakpoint-sm: 768px;
+  --breakpoint-md: 1024px;
+  --breakpoint-lg: 1200px;
+  --breakpoint-xl: 1400px;
+  --breakpoint-xxl: 1600px;
 }
