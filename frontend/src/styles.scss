@@ -53,3 +53,16 @@ body {
     color: var(--color-background) !important;
   }
 }
+
+.error-snackbar {
+  .mat-mdc-snackbar-surface {
+    background-color: var(--color-error) !important;
+    color: var(--color-background) !important;
+  }
+}
+
+.helper-text {
+  width: 100%;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}

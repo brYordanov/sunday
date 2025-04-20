@@ -62,6 +62,7 @@ export class RegisterStockFormComponent {
               this.stockRegisterForm.markAsPristine();
               this.stockRegisterForm.markAsUntouched();
               this.stockRegisterForm.get('symbol')?.setErrors(null);
+              this.registerBarInput$.next('');
               this.showSuccessMessage();
             },
             error: () => {

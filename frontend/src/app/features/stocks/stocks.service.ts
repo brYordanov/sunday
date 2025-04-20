@@ -5,7 +5,6 @@ import { API_URL } from '../../../../env';
 import { registerStockPayload, StockQueryParams } from './stocks.types';
 import {
   DetailedStockInfoDto,
-  GetStockQueryParamsDto,
   StockDto,
   StockSymbolPaginatedResponceDto,
 } from '@sunday/validations';

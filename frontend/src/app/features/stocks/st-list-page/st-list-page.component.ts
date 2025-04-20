@@ -8,7 +8,6 @@ import { FilterStockFormComponent } from '../filter-stock-form/filter-stock-form
 import { TooltipComponent } from '../../../shared/components/tooltip/tooltip.component';
 import { MatIcon } from '@angular/material/icon';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-stocks',
@@ -52,5 +51,5 @@ export class StocksListComponent {
     },
   ];
 
-  stocksData = this.stockService.stocks$;
+  stocksData$ = this.stockService.stocks$;
 }
