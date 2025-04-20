@@ -22,3 +22,10 @@
   grid-auto-columns: 1fr !important;
   border-radius: 0 !important;
 }
+
+.shorter {
+  .mat-mdc-form-field-infix {
+    padding: 8px 0 !important;
+    min-height: unset !important;
+  }
+}

@@ -1,3 +1,7 @@
-<!-- <app-register-stock-form></app-register-stock-form> -->
+<app-register-stock-form></app-register-stock-form>
 <app-filter-stock-form></app-filter-stock-form>
+<app-tooltip>
+  <mat-icon tooltip-icon>info</mat-icon>
+  <span tooltip-text>Can't find what you are looking for? Try registering the stock first.</span>
+</app-tooltip>
 <app-info-table [data$]="stocksData" [columns]="tableColumns"></app-info-table>
