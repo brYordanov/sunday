@@ -22,7 +22,7 @@ export class StockSymbolsService {
     private readonly httpService: HttpService,
     private readonly paginationService: PaginationService,
   ) {
-    this.apiKey = this.configService.get<string>('FINANCIAL_MODALING_PREP_API_KEY');
+    this.apiKey = this.configService.get<string>('FINANCIAL_MODELING_PREP_API_KEY');
   }
 
   async getSymbols(params: StockSymbolQueryParamsDto): Promise<StockSymbolPaginatedResponceDto> {

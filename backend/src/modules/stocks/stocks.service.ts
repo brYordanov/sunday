@@ -5,7 +5,6 @@ import { CacheService } from 'src/modules/cache/cache.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Stock } from './stock.entity';
 import { Repository } from 'typeorm';
-import { createBody } from './stock.calculations';
 import { ConfigService } from '@nestjs/config';
 import {
   StockSymbolDto,
@@ -32,7 +31,7 @@ export class StocksService {
   }
 
   async processStock(stockSymbol: string): Promise<Stock> {
-    const existingRecord = await this.findBySymbol(stockSymbol);
+    const existingRecord = await this.stockRepository.findOneBy({ symbol: stockSymbol });
     if (existingRecord) {
       return existingRecord;
     }
@@ -48,12 +47,8 @@ export class StocksService {
     return this.saveStock(stockRawData);
   }
 
-  findBySymbol(symbol: string) {
-    return this.stockRepository.findOneBy({ symbol });
-  }
-
   async saveStock(data: Partial<Stock>): Promise<Stock> {
-    const processedData = await this.stockRepository.create(createBody(data));
+    const processedData = await this.stockRepository.create(this.createBody(data));
     return this.stockRepository.save(processedData);
   }
 
@@ -100,5 +95,15 @@ export class StocksService {
       stockSymbolData: StockSymbolSchema.parse(symbolData),
       cachedData: JSON.parse(cachedData),
     };
+  }
+
+  createBody(stockData) {
+    const dataPerMonth = stockData['Monthly Time Series'];
+    const entries = Object.entries(dataPerMonth);
+    const [oldestRecordDate, oldestRecordValue] = entries[entries.length - 1];
+    const [newestRecordDate, newestRecordValue] = entries[0];
+    const symbol = stockData['Meta Data']['2. Symbol'];
+
+    return { oldestRecordDate, newestRecordDate, symbol };
   }
 }
