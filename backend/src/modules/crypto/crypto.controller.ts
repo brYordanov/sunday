@@ -17,7 +17,7 @@ export class CryptoController {
   @Get()
   @ValidateQuery(GetCryptoQueryParamsSchema)
   @ValidateResponse(CryptoSchema)
-  async getStock(@Query() params: GetCryptoQueryParamsDto): Promise<Crypto[] | Crypto> {
+  async getStock(@Query() params: GetCryptoQueryParamsDto): Promise<Crypto[]> {
     return this.cryptoService.getCrypto(params);
   }
 

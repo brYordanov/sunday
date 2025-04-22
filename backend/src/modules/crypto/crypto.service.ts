@@ -58,7 +58,7 @@ export class CryptoService {
     return response.data;
   }
 
-  async getCrypto(params: GetStockQueryParamsDto): Promise<Crypto[] | Crypto> {
+  async getCrypto(params: GetStockQueryParamsDto): Promise<Crypto[]> {
     const query = this.cryptoRepository.createQueryBuilder('crypto');
 
     Object.entries(params).forEach(([key, value]) => {
