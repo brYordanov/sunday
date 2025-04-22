@@ -4,8 +4,6 @@ import { Stock } from './stock.entity';
 import {
   GetStockQueryParamsDto,
   GetStockQueryParamsSchema,
-  StockSymbolDto,
-  StockSymbolSchema,
   StockSchema,
   StockSymbolPropertySchema,
   StockSymbolPropertyDto,
@@ -33,7 +31,7 @@ export class StocksController {
   @Post()
   @ValidateBody(StockSymbolPropertySchema)
   @ValidateResponse(StockSchema)
-  async registerStock(@Body() body: StockSymbolDto): Promise<Stock> {
+  async registerStock(@Body() body: StockSymbolPropertyDto): Promise<Stock> {
     return this.stockService.processStock(body.symbol);
   }
 }
