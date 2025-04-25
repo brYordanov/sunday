@@ -10,7 +10,6 @@ import { StockService } from '../stocks.service';
 
 @Component({
   selector: 'app-filter-stock-form',
-  providers: [provideNativeDateAdapter()],
   imports: [
     MatFormFieldModule,
     MatInputModule,

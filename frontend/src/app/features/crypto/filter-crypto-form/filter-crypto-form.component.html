@@ -1,0 +1,33 @@
+<form class="form" [formGroup]="cryptoFilterForm" (ngSubmit)="onSubmit()">
+  <mat-form-field class="input-field">
+    <mat-label>Symbol</mat-label>
+    <input matInput [formControl]="cryptoFilterForm.controls.symbol" />
+  </mat-form-field>
+  <mat-form-field class="date-field">
+    <input
+      matInput
+      [matDatepicker]="afterDate"
+      [formControl]="cryptoFilterForm.controls.createdAfter"
+    />
+    <mat-label>Created After</mat-label>
+    <mat-hint>MM/DD/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="afterDate"></mat-datepicker-toggle>
+    <mat-datepicker #afterDate></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field class="date-field">
+    <input
+      matInput
+      [matDatepicker]="beforeDate"
+      [formControl]="cryptoFilterForm.controls.createdBefore"
+    />
+    <mat-label>Created Before</mat-label>
+    <mat-hint>MM/DD/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="beforeDate"></mat-datepicker-toggle>
+    <mat-datepicker #beforeDate></mat-datepicker>
+  </mat-form-field>
+  <button mat-stroked-button class="search-btn" type="submit">
+    Search
+    <mat-icon tooltip-icon>search</mat-icon>
+  </button>
+  <button mat-stroked-button class="clear-btn" type="button" (click)="onClear()">Clear</button>
+</form>

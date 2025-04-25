@@ -29,5 +29,4 @@ export const GetCryptoQueryParamsSchema = z.object({
     .optional(),
   order: z.enum(['ASC', 'DESC']).optional(),
 });
-
 export type GetCryptoQueryParamsDto = z.infer<typeof GetCryptoQueryParamsSchema>;
