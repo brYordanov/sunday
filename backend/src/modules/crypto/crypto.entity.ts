@@ -1,8 +1,7 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { TermAnalysis, TermPredictability } from './stock.types';
 
-@Entity({ name: 'stocks' })
-export class Stock {
+@Entity({ name: 'crypto' })
+export class Crypto {
   @PrimaryGeneratedColumn()
   id: number;
 

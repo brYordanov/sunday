@@ -7,7 +7,6 @@ import { CommonModule } from '@angular/common';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 import { prepareChartData } from './helpers';
 import { ChartComponent } from '../../../shared/components/chart/chart.component';
-import { Column } from '../../../shared/components/info-table/info-table.types';
 
 @Component({
   selector: 'app-st-details-page',
@@ -18,24 +17,6 @@ import { Column } from '../../../shared/components/info-table/info-table.types';
 export class StDetailsPageComponent {
   private route = inject(ActivatedRoute);
   private stockService = inject(StockService);
-  tableColumns: Column[] = [
-    {
-      name: 'criteria',
-      title: '',
-    },
-    {
-      name: 'shortTerm',
-      title: 'shortTerm',
-    },
-    {
-      name: 'midTerm',
-      title: 'midTerm',
-    },
-    {
-      name: 'longTerm',
-      title: 'longTerm',
-    },
-  ];
 
   stockSymbol$ = this.route.paramMap.pipe(map((params) => params.get('symbol')));
 

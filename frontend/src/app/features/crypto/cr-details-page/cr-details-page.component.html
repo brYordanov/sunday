@@ -1,1 +1,44 @@
-<p>cr-details-page works!</p>
+<div *ngIf="cryptoData$ | async as crypto; else loading">
+  <div class="info-container">
+    <div class="head-container">
+      <h1>{{ crypto.cryptoSymbolData.symbol | uppercase }}</h1>
+      <img
+        width="50"
+        height="50"
+        src="{{ crypto.cryptoSymbolData.image }}"
+        alt="{{ crypto.cryptoSymbolData.symbol }}"
+      />
+    </div>
+    <h2>{{ crypto.cryptoSymbolData.name }}</h2>
+    <p>Data from: {{ crypto.analysedData.createdAt }}</p>
+  </div>
+  <mat-tab-group>
+    <mat-tab label="1 year">
+      <ng-template matTabContent>
+        <app-chart [id]="'1'" [chartData]="oneYearData$ | async"></app-chart>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="5 years">
+      <ng-template matTabContent>
+        <app-chart [id]="'2'" [chartData]="fiveYearData$ | async"></app-chart>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="10 years">
+      <ng-template matTabContent>
+        <app-chart [id]="'3'" [chartData]="tenYearData$ | async"></app-chart>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="From Beginning">
+      <ng-template matTabContent>
+        <app-chart [id]="'4'" [chartData]="fromBeginningData$ | async"></app-chart>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+
+  <p>Term Analysis</p>
+</div>
+<ng-template #loading>
+  <div class="loader-container">
+    <app-loader></app-loader>
+  </div>
+</ng-template>

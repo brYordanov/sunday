@@ -26,4 +26,11 @@ export const routes: Routes = [
         (m) => m.CrListPageComponent,
       ),
   },
+  {
+    path: 'crypto/:symbol',
+    loadComponent: () =>
+      import('./features/crypto/cr-details-page/cr-details-page.component').then(
+        (m) => m.CrDetailsPageComponent,
+      ),
+  },
 ];

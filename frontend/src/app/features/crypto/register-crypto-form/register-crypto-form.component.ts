@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { StockService } from '../stocks.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { CryptoService } from '../crypto.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   BehaviorSubject,
   debounceTime,
@@ -10,18 +10,17 @@ import {
   switchMap,
   tap,
 } from 'rxjs';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { SnackbarComponent } from '../../../shared/components/snackbar/snackbar.component';
 import { SearchBarComponent } from '../../../shared/components/search-bar/search-bar.component';
-import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { SnackbarComponent } from '../../../shared/components/snackbar/snackbar.component';
 
 @Component({
-  selector: 'app-register-stock-form',
+  selector: 'app-register-crypto-form',
   imports: [
     SearchBarComponent,
     ReactiveFormsModule,
@@ -31,16 +30,16 @@ import { SnackbarComponent } from '../../../shared/components/snackbar/snackbar.
     CommonModule,
     LoaderComponent,
   ],
-  templateUrl: './register-stock-form.component.html',
-  styleUrl: './register-stock-form.component.scss',
+  templateUrl: './register-crypto-form.component.html',
+  styleUrl: './register-crypto-form.component.scss',
 })
-export class RegisterStockFormComponent {
-  private stockService = inject(StockService);
+export class RegisterCryptoFormComponent {
+  private cryptoService = inject(CryptoService);
   snackBar = inject(MatSnackBar);
   private registerBarInput$ = new BehaviorSubject<string>('');
   isLoading = false;
 
-  stockRegisterForm = new FormGroup({
+  cryptoRegisterForm = new FormGroup({
     symbol: new FormControl('', {
       nonNullable: true,
       validators: Validators.required,
@@ -48,20 +47,20 @@ export class RegisterStockFormComponent {
   });
 
   onSubmit() {
-    if (this.stockRegisterForm.valid) {
-      const symbol = this.stockRegisterForm.value.symbol!;
+    if (this.cryptoRegisterForm.valid) {
+      const symbol = this.cryptoRegisterForm.value.symbol!;
       this.isLoading = true;
-      this.stockService
-        .registerStock({ symbol })
+      this.cryptoService
+        .registerCrypto({ symbol })
         .pipe(
           tap({
             next: () => {
               this.isLoading = false;
-              this.stockService.refreshStocks();
-              this.stockRegisterForm.reset({ symbol: '' });
-              this.stockRegisterForm.markAsPristine();
-              this.stockRegisterForm.markAsUntouched();
-              this.stockRegisterForm.get('symbol')?.setErrors(null);
+              this.cryptoService.refreshStocks();
+              this.cryptoRegisterForm.reset({ symbol: '' });
+              this.cryptoRegisterForm.markAsPristine();
+              this.cryptoRegisterForm.markAsUntouched();
+              this.cryptoRegisterForm.get('symbol')?.setErrors(null);
               this.registerBarInput$.next('');
               this.showSuccessMessage();
             },
@@ -80,8 +79,8 @@ export class RegisterStockFormComponent {
     debounceTime(300),
     map((value) => value.trim()),
     distinctUntilChanged(),
-    switchMap((value) => this.stockService.getStockSymbols(value)),
-    map((response) => response.data.map((option) => option.symbol)),
+    switchMap((value) => this.cryptoService.getStockSymbols(value)),
+    map((response) => response.data.map((option) => option.symbol.toUpperCase())),
   );
 
   onInputRegisterBar = (value: string) => {
@@ -90,7 +89,7 @@ export class RegisterStockFormComponent {
 
   showSuccessMessage() {
     this.snackBar.openFromComponent(SnackbarComponent, {
-      data: { message: 'Registered stock successfully!', icon: 'check' },
+      data: { message: 'Registered crypto successfully!', icon: 'check' },
       duration: 1000,
       panelClass: ['success-snackbar'],
     });
