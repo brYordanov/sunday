@@ -61,6 +61,9 @@ export class StocksService {
 
   async getStock(params: GetStockQueryParamsDto): Promise<Stock[]> {
     const query = this.stockRepository.createQueryBuilder('stock');
+    if (params.symbol) {
+      params = { ...params, symbol: params.symbol.toUpperCase() };
+    }
 
     Object.entries(params).forEach(([key, value]) => {
       if (!value) return;

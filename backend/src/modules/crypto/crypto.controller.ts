@@ -8,6 +8,7 @@ import {
   RegisterCryptoBodyDto,
   RegisterCryptoBodySchema,
   GetCryptoQueryParamsDto,
+  DetailedCryptoInfoDto,
 } from '@sunday/validations';
 
 @Controller('crypto')
@@ -19,6 +20,15 @@ export class CryptoController {
   @ValidateResponse(CryptoSchema)
   async getStock(@Query() params: GetCryptoQueryParamsDto): Promise<Crypto[]> {
     return this.cryptoService.getCrypto(params);
+  }
+
+  @Get('detailed')
+  // @ValidateResponse(DetailedStockInfoSchema)
+  // @ValidateQuery(StockSymbolPropertySchema)
+  async getDetailedStockInfo(
+    @Query() params: RegisterCryptoBodyDto,
+  ): Promise<DetailedCryptoInfoDto> {
+    return this.cryptoService.getDetailedInfo(params);
   }
 
   @Post()

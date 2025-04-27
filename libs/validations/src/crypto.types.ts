@@ -1,4 +1,5 @@
 import { symbol, z } from 'zod';
+import { CryptoSymbolSchema } from './crypto-symbols.types';
 
 export const CryptoSchema = z.object({
   id: z.number(),
@@ -7,13 +8,11 @@ export const CryptoSchema = z.object({
   newestRecordDate: z.string(),
   createdAt: z.date().transform((date) => date.toISOString().split('T')[0]),
 });
-
 export type CryptoDto = z.infer<typeof CryptoSchema>;
 
 export const RegisterCryptoBodySchema = z.object({
   symbol: z.string().nonempty(),
 });
-
 export type RegisterCryptoBodyDto = z.infer<typeof RegisterCryptoBodySchema>;
 
 export const GetCryptoQueryParamsSchema = z.object({
@@ -30,3 +29,10 @@ export const GetCryptoQueryParamsSchema = z.object({
   order: z.enum(['ASC', 'DESC']).optional(),
 });
 export type GetCryptoQueryParamsDto = z.infer<typeof GetCryptoQueryParamsSchema>;
+
+export const DetailedCryptoInfoSchema = z.object({
+  analysedData: CryptoSchema,
+  cryptoSymbolData: CryptoSymbolSchema,
+  cachedData: z.record(z.any()),
+});
+export type DetailedCryptoInfoDto = z.infer<typeof DetailedCryptoInfoSchema>;

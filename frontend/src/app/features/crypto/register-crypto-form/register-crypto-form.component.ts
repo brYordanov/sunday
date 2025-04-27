@@ -77,10 +77,10 @@ export class RegisterCryptoFormComponent {
 
   options$ = this.registerBarInput$.pipe(
     debounceTime(300),
-    map((value) => value.trim().toUpperCase()),
+    map((value) => value.trim()),
     distinctUntilChanged(),
     switchMap((value) => this.cryptoService.getStockSymbols(value)),
-    map((response) => response.data.map((option) => option.symbol)),
+    map((response) => response.data.map((option) => option.symbol.toUpperCase())),
   );
 
   onInputRegisterBar = (value: string) => {

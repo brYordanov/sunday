@@ -5,7 +5,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { CacheService } from '../cache/cache.service';
 import { Crypto } from './crypto.entity';
-import { GetStockQueryParamsDto } from '@sunday/validations';
+import {
+  CryptoSchema,
+  CryptoSymbolSchema,
+  DetailedCryptoInfoDto,
+  GetStockQueryParamsDto,
+  RegisterCryptoBodyDto,
+} from '@sunday/validations';
+import { CryptoSymbolsService } from '../crypto-symbols/crypto-symbols.service';
 
 @Injectable()
 export class CryptoService {
@@ -15,6 +22,7 @@ export class CryptoService {
     private readonly cryptoRepository: Repository<Crypto>,
     private readonly httpService: HttpService,
     private readonly cacheService: CacheService,
+    private readonly cryptoSymbolService: CryptoSymbolsService,
     private configService: ConfigService,
   ) {
     this.apiKey = this.configService.get<string>('COIN_DESK_API_KEY');
@@ -36,6 +44,7 @@ export class CryptoService {
 
     const dailyCryptoRawData = await this.getDataFromExternalApi(symbol);
     const monthlyCryptoRawData = this.convertToMonthly(dailyCryptoRawData['Data']);
+
     await this.cacheService.setCachedData(symbol, JSON.stringify(monthlyCryptoRawData));
     return this.saveCrypto(monthlyCryptoRawData, symbol);
   }
@@ -53,7 +62,7 @@ export class CryptoService {
 
   async getDataFromExternalApi(symbol: string): Promise<any> {
     const response = await this.httpService.axiosRef.get(
-      `https://data-api.coindesk.com/index/cc/v1/historical/days?market=cadli&instrument=${symbol}-USD&limit=5000&aggregate=1&fill=true&apply_mapping=true&response_format=JSON`,
+      `https://data-api.coindesk.com/index/cc/v1/historical/days?market=cadli&instrument=${symbol.toUpperCase()}-USD&limit=5000&aggregate=1&fill=true&apply_mapping=true&response_format=JSON`,
     );
     return response.data;
   }
@@ -62,7 +71,7 @@ export class CryptoService {
     const query = this.cryptoRepository.createQueryBuilder('crypto');
 
     Object.entries(params).forEach(([key, value]) => {
-      if (!value) return;
+      if (value === undefined || value === null || value === '') return;
 
       if (key === 'order') {
         query.orderBy('crypto.createdAt', value as 'ASC' | 'DESC');
@@ -72,6 +81,8 @@ export class CryptoService {
       } else if (key === 'createdBefore') {
         const formattedDate = new Date(value).toISOString();
         query.andWhere(`crypto.createdAt < :${key}`, { [key]: formattedDate });
+      } else if (typeof value === 'string') {
+        query.andWhere(`LOWER(crypto.${key}) LIKE :${key}`, { [key]: `%${value.toLowerCase()}%` });
       } else {
         query.andWhere(`crypto.${key} = :${key}`, { [key]: value });
       }
@@ -80,32 +91,43 @@ export class CryptoService {
     return query.getMany();
   }
 
+  async getDetailedInfo(params: RegisterCryptoBodyDto): Promise<DetailedCryptoInfoDto> {
+    const [analysedData, symbolData, cachedData] = await Promise.all([
+      this.cryptoRepository.findOne({
+        where: { symbol: params.symbol },
+      }),
+      this.cryptoSymbolService.getSpecificSymbol(params.symbol),
+      this.cacheService.getCachedData(params.symbol),
+    ]);
+
+    return {
+      analysedData: CryptoSchema.parse(analysedData),
+      cryptoSymbolData: CryptoSymbolSchema.parse(symbolData),
+      cachedData: JSON.parse(cachedData),
+    };
+  }
+
   private getDateRange(monthlyData) {
-    if (!monthlyData || monthlyData.length === 0) {
+    const dates = Object.keys(monthlyData);
+
+    if (dates.length === 0) {
       return { oldestRecordDate: null, newestRecordDate: null };
     }
 
-    let oldest = monthlyData[0];
-    let newest = monthlyData[0];
+    let oldestRecordDate = dates[0];
+    let newestRecordDate = dates[0];
 
-    for (const entry of monthlyData) {
-      if (entry.timestamp < oldest.timestamp) {
-        oldest = entry;
+    for (let i = 1; i < dates.length; i++) {
+      const date = dates[i];
+      if (date < oldestRecordDate) {
+        oldestRecordDate = date;
       }
-      if (entry.timestamp > newest.timestamp) {
-        newest = entry;
+      if (date > newestRecordDate) {
+        newestRecordDate = date;
       }
     }
 
-    const formatDate = (timestamp) => {
-      const d = new Date(timestamp * 1000);
-      return d.toISOString().split('T')[0];
-    };
-
-    return {
-      oldestRecordDate: formatDate(oldest.timestamp),
-      newestRecordDate: formatDate(newest.timestamp),
-    };
+    return { oldestRecordDate, newestRecordDate };
   }
 
   private convertToMonthly(data) {
@@ -113,17 +135,33 @@ export class CryptoService {
 
     for (const day of data) {
       const date = new Date(day.TIMESTAMP * 1000);
-      const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+      const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-28`;
 
-      if (!monthly[key] || day.TIMESTAMP > monthly[key].TIMESTAMP) {
+      if (!monthly[key]) {
         monthly[key] = {
-          date: key,
+          open: day.OPEN,
           close: day.CLOSE,
-          timestamp: day.TIMESTAMP,
+          high: day.HIGH,
+          low: day.LOW,
+          volume: day.VOLUME || 0,
+          _timestamp: day.TIMESTAMP,
         };
+      } else {
+        if (day.TIMESTAMP > monthly[key]._timestamp) {
+          monthly[key].close = day.CLOSE;
+          monthly[key]._timestamp = day.TIMESTAMP;
+        }
+
+        if (day.TIMESTAMP < new Date(`${key}-01`).getTime() / 1000) {
+          monthly[key].open = day.OPEN;
+        }
+
+        monthly[key].high = Math.max(monthly[key].high, day.HIGH);
+        monthly[key].low = Math.min(monthly[key].low, day.LOW);
+        monthly[key].volume += day.VOLUME || 0;
       }
     }
 
-    return Object.values(monthly).sort((a, b) => a['timestamp'] - b['timestamp']);
+    return monthly;
   }
 }

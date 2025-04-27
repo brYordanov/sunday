@@ -26,8 +26,9 @@ export class CryptoSymbolsService {
       .orderBy('name', params.order);
 
     if (params.query) {
-      queryBuilder.andWhere('crypto-symbol.name LIKE :query', {
-        query: `%${params.query}%`,
+      const query = params.query.toLowerCase();
+      queryBuilder.andWhere('LOWER(crypto-symbol.symbol) LIKE :query', {
+        query: `%${query}%`,
       });
     }
 
@@ -73,6 +74,14 @@ export class CryptoSymbolsService {
     } catch (err) {
       throw new BadRequestException(err);
     }
+  }
+
+  async getSpecificSymbol(symbolName: string): Promise<CryptoSymbol> {
+    return this.cryptoSymbolRepository.findOne({
+      where: {
+        symbol: symbolName.toLocaleLowerCase(),
+      },
+    });
   }
 
   private transformToExternalApiCryptoSymbolDto(data: ExternalApiCryptoSymbolDto): CryptoSymbol {

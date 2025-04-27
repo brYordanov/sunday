@@ -1,6 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { CryptoDto, CryptoSymbolPaginatedResponceDto } from '@sunday/validations';
+import {
+  CryptoDto,
+  CryptoSymbolPaginatedResponceDto,
+  DetailedCryptoInfoDto,
+} from '@sunday/validations';
 import { BehaviorSubject, Observable, shareReplay, switchMap } from 'rxjs';
 import { API_URL } from '../../../../env';
 import { CryptoQueryParams, registerCryptoPayload } from './crypto.types';
@@ -28,6 +32,12 @@ export class CryptoService {
   getStockSymbols(query: string): Observable<CryptoSymbolPaginatedResponceDto> {
     return this.http.get<CryptoSymbolPaginatedResponceDto>(
       `${API_URL}/crypto-symbols?query=${query}`,
+    );
+  }
+
+  getDetailedCryptoInfo(cryptoSymbol: string): Observable<DetailedCryptoInfoDto> {
+    return this.http.get<DetailedCryptoInfoDto>(
+      `${API_URL}/crypto/detailed?symbol=${cryptoSymbol}`,
     );
   }
 

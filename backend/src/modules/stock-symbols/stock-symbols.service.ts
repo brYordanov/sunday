@@ -31,8 +31,9 @@ export class StockSymbolsService {
       .orderBy('symbol', params.order);
 
     if (params.query) {
+      const query = params.query.toUpperCase();
       queryBuilder.andWhere('stock-symbol.symbol LIKE :query', {
-        query: `%${params.query}%`,
+        query: `%${query}%`,
       });
     }
 

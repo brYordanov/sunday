@@ -46,7 +46,7 @@ export class CrListPageComponent {
       name: 'action',
       title: '',
       type: 'Link',
-      linkPath: '/stocks',
+      linkPath: '/crypto',
     },
   ];
 

@@ -8,7 +8,6 @@ export const StockSchema = z.object({
   newestRecordDate: z.string(),
   createdAt: z.date().transform((date) => date.toISOString().split('T')[0]),
 });
-
 export type StockDto = z.infer<typeof StockSchema>;
 
 export const GetStockQueryParamsSchema = z.object({
@@ -24,13 +23,11 @@ export const GetStockQueryParamsSchema = z.object({
     .optional(),
   order: z.enum(['ASC', 'DESC']).optional(),
 });
-
 export type GetStockQueryParamsDto = z.infer<typeof GetStockQueryParamsSchema>;
 
 export const StockSymbolPropertySchema = z.object({
   symbol: z.string().nonempty(),
 });
-
 export type StockSymbolPropertyDto = z.infer<typeof StockSymbolPropertySchema>;
 
 export const DetailedStockInfoSchema = z.object({
@@ -38,5 +35,4 @@ export const DetailedStockInfoSchema = z.object({
   stockSymbolData: StockSymbolSchema,
   cachedData: z.record(z.any()),
 });
-
 export type DetailedStockInfoDto = z.infer<typeof DetailedStockInfoSchema>;

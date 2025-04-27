@@ -7,6 +7,7 @@ import { HttpModule } from '@nestjs/axios';
 import { ConfigModule } from '@nestjs/config';
 import { Crypto } from './crypto.entity';
 import { CacheModule } from '../cache/cache.module';
+import { CryptoSymbolsModule } from '../crypto-symbols/crypto-symbols.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { CacheModule } from '../cache/cache.module';
     }),
     ConfigModule.forRoot(),
     CacheModule,
+    CryptoSymbolsModule,
   ],
   controllers: [CryptoController],
   providers: [CryptoService],

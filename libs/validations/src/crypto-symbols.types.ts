@@ -25,10 +25,7 @@ export const populateCryptoSymbolsResponseSchema = z.object({
 export type PopulateCryptoSymbolsResponseDto = z.infer<typeof populateCryptoSymbolsResponseSchema>;
 
 export const CryptoSymbolQueryParamsSchema = z.object({
-  query: z
-    .string()
-    .optional()
-    .transform((val) => val?.toUpperCase()),
+  query: z.string().optional(),
   limit: z.coerce.number().int().positive().default(10),
   order: z.enum(['ASC', 'DESC']).default('ASC'),
   page: z.coerce.number().int().positive().default(1),

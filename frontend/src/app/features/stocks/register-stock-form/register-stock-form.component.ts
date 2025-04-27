@@ -78,7 +78,7 @@ export class RegisterStockFormComponent {
 
   options$ = this.registerBarInput$.pipe(
     debounceTime(300),
-    map((value) => value.trim().toUpperCase()),
+    map((value) => value.trim()),
     distinctUntilChanged(),
     switchMap((value) => this.stockService.getStockSymbols(value)),
     map((response) => response.data.map((option) => option.symbol)),

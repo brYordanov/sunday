@@ -10,5 +10,6 @@ import { HttpModule } from '@nestjs/axios';
   imports: [TypeOrmModule.forFeature([CryptoSymbol]), HttpModule.register({})],
   controllers: [CryptoSymbolsController],
   providers: [CryptoSymbolsService, PaginationService],
+  exports: [CryptoSymbolsService],
 })
 export class CryptoSymbolsModule {}
