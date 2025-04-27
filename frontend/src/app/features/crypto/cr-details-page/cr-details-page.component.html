@@ -14,7 +14,9 @@
   </div>
   <mat-tab-group>
     <mat-tab label="1 year">
-      <app-chart [id]="'1'" [chartData]="oneYearData$ | async"></app-chart>
+      <ng-template matTabContent>
+        <app-chart [id]="'1'" [chartData]="oneYearData$ | async"></app-chart>
+      </ng-template>
     </mat-tab>
     <mat-tab label="5 years">
       <ng-template matTabContent>
