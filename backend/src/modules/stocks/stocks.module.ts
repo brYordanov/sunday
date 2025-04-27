@@ -9,6 +9,7 @@ import { StocksService } from './stocks.service';
 import { CacheModule } from 'src/modules/cache/cache.module';
 import { Stock } from './stock.entity';
 import { SchedulerService } from 'src/services/scheduler.service';
+import { StockSymbolsModule } from '../stock-symbols/stock-symbols.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { SchedulerService } from 'src/services/scheduler.service';
     }),
     ConfigModule.forRoot(),
     CacheModule,
+    StockSymbolsModule,
   ],
   controllers: [StocksController],
   providers: [StocksService, SchedulerService],

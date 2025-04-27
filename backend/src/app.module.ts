@@ -8,6 +8,8 @@ import { StocksModule } from './modules/stocks/stocks.module';
 import { join } from 'path';
 import { CacheModule } from './modules/cache/cache.module';
 import { StockSymbolsModule } from './modules/stock-symbols/stock-symbols.module';
+import { CryptoModule } from './modules/crypto/crypto.module';
+import { CryptoSymbolsModule } from './modules/crypto-symbols/crypto-symbols.module';
 
 @Module({
   imports: [
@@ -32,6 +34,8 @@ import { StockSymbolsModule } from './modules/stock-symbols/stock-symbols.module
     }),
     CacheModule,
     StockSymbolsModule,
+    CryptoModule,
+    CryptoSymbolsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

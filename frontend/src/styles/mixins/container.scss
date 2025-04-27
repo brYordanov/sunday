@@ -1,0 +1,17 @@
+@use 'sass:map';
+
+@mixin container($breakpoints) {
+  width: 100%;
+  padding: 0 10px;
+  margin: 0 auto;
+
+  max-width: map.get($breakpoints, smallest);
+
+  @each $breakpoint, $max-width in $breakpoints {
+    @if $breakpoint != smallest {
+      @media (min-width: $breakpoint) {
+        max-width: $max-width;
+      }
+    }
+  }
+}

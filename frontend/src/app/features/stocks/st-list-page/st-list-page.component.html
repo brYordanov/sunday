@@ -1,0 +1,39 @@
+<mat-accordion class="example-headers-align options-container" multi>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title class="option-header">
+        Filter Stocks
+        <mat-icon>tune</mat-icon>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="option-content">
+      <app-filter-stock-form></app-filter-stock-form>
+      <app-tooltip>
+        <mat-icon tooltip-icon>help</mat-icon>
+        <span tooltip-text>
+          Can't find what you are looking for? Try registering the stock first.
+        </span>
+      </app-tooltip>
+      <p class="helper-text">Search among stocks you're already monitoring</p>
+    </div>
+  </mat-expansion-panel>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title class="option-header">
+        Register Strocks
+
+        <mat-icon>library_add</mat-icon>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-register-stock-form></app-register-stock-form>
+    <p class="helper-text">Register a stock to start monitoring and get analysis</p>
+  </mat-expansion-panel>
+</mat-accordion>
+<ng-container *ngIf="stocksData$ | async as stocksData">
+  <ng-container *ngIf="stocksData.length > 0; else noStocks">
+    <app-info-table [data$]="stocksData$" [columns]="tableColumns"></app-info-table>
+  </ng-container>
+  <ng-template #noStocks>
+    <p class="no-stocks">No stocks found</p>
+  </ng-template>
+</ng-container>

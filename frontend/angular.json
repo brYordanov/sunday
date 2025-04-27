@@ -30,7 +30,12 @@
               }
             ],
             "styles": ["src/styles.scss"],
-            "scripts": []
+            "scripts": [],
+            "server": "src/main.server.ts",
+            "prerender": true,
+            "ssr": {
+              "entry": "src/server.ts"
+            }
           },
           "configurations": {
             "production": {
@@ -67,6 +72,31 @@
             }
           },
           "defaultConfiguration": "development"
+        },
+        "build-ssr": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/frontend/server",
+            "main": "src/main.server.ts",
+            "tsConfig": "tsconfig.server.json"
+          }
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "options": {
+            "browserTarget": "frontend:build",
+            "serverTarget": "frontend:build-ssr"
+          },
+          "configurations": {
+            "development": {
+              "browserTarget": "frontend:build:development",
+              "serverTarget": "frontend:build-ssr"
+            },
+            "production": {
+              "browserTarget": "frontend:build:production",
+              "serverTarget": "frontend:build-ssr"
+            }
+          }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"

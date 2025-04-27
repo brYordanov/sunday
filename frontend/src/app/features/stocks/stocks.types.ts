@@ -1,3 +1,9 @@
 export type registerStockPayload = {
-  stockSymbol: string;
+  symbol: string;
 };
+
+export type StockQueryParams = Partial<{
+  symbol: string | null;
+  createdAfter: Date | null;
+  createdBefore: Date | null;
+}>;

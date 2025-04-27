@@ -1,0 +1,32 @@
+.header {
+  padding: 10px 0;
+  background-color: var(--color-accent-secondary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.link-list {
+  display: flex;
+  gap: 10px;
+  list-style: none;
+}
+
+.navigation {
+  display: flex;
+  align-items: center;
+}
+
+.link {
+  color: var(--color-background);
+  text-decoration: none;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}

@@ -1,31 +1,68 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
+@use './styles/overwrites.scss';
+@use './styles/themes/index.scss';
 
-html {
-  @include mat.theme(
-    (
-      color: (
-        theme-type: light,
-        primary: mat.$azure-palette,
-        tertiary: mat.$blue-palette,
-      ),
-      typography: Roboto,
-      density: 0,
-    )
-  );
-} /* You can add global styles to this file, and also import other style files */
+// html {
+//   @include mat.theme(
+//     (
+//       color: (
+//         theme-type: light,
+//         primary: mat.$azure-palette,
+//         tertiary: mat.$azure-palette,
+//       ),
+//       typography: Roboto,
+//       density: 0,
+//     )
+//   );
+// }
+/* You can add global styles to this file, and also import other style files */
 
 html,
 body {
   height: 100%;
-}
-body {
-  margin: 0;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.mat-mdc-form-field-subscript-wrapper {
-  height: 0 !important;
-  overflow: hidden;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  padding-inline-start: 0;
+}
+
+:root {
+  --border-radius-primary: 20px;
+  --border-radius-secondary: 0;
+
+  --breakpoint-smallest: 0;
+  --breakpoint-sm: 768px;
+  --breakpoint-md: 1024px;
+  --breakpoint-lg: 1200px;
+  --breakpoint-xl: 1400px;
+  --breakpoint-xxl: 1600px;
+}
+
+.success-snackbar {
+  .mat-mdc-snackbar-surface {
+    background-color: var(--color-success) !important;
+    color: var(--color-background) !important;
+  }
+}
+
+.error-snackbar {
+  .mat-mdc-snackbar-surface {
+    background-color: var(--color-error) !important;
+    color: var(--color-background) !important;
+  }
+}
+
+.helper-text {
+  width: 100%;
+  color: var(--color-text-muted);
+  font-size: 14px;
 }

@@ -1,8 +1,7 @@
-@use '../../../../mixins/container.scss' as *;
+@use '../../../../styles/mixins/container.scss' as *;
 
 $container-breakpoints: (
   smallest: 100%,
-  480px: 440px,
   768px: 720px,
   1024px: 960px,
   1200px: 1140px,
@@ -11,5 +10,6 @@ $container-breakpoints: (
 );
 
 .container {
+  position: relative;
   @include container($container-breakpoints);
 }

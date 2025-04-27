@@ -1,0 +1,22 @@
+.option-header {
+  display: flex;
+  gap: 10px;
+}
+
+.option-content {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.options-container {
+  display: block;
+  padding: 20px 0;
+}
+
+.no-stocks {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

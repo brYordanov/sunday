@@ -15,12 +15,6 @@ export class Stock {
   @Column({ type: 'text' })
   newestRecordDate: string;
 
-  @Column({ type: 'jsonb' })
-  termAnalysis: TermAnalysis;
-
-  @Column({ type: 'jsonb' })
-  predictability: TermPredictability;
-
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 }

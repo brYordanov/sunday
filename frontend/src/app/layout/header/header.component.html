@@ -1,0 +1,20 @@
+<header class="header">
+  <app-container>
+    <div class="header-container">
+      <a [routerLink]="['/']" class="link">
+        <img width="132" height="40" src="logo.png" alt="sunday" class="light-theme-only" />
+        <img width="132" height="40" src="logo-dark.png" alt="sunday" class="dark-theme-only" />
+      </a>
+      <div class="content">
+        <nav class="navigation">
+          <ul class="link-list">
+            <li><a [routerLink]="['/stocks']" class="link">Stocks</a></li>
+            <li><a [routerLink]="['/etfs']" class="link">ETFs</a></li>
+            <li><a [routerLink]="['/crypto']" class="link">Crypto</a></li>
+          </ul>
+        </nav>
+        <app-light-switch-btn></app-light-switch-btn>
+      </div>
+    </div>
+  </app-container>
+</header>

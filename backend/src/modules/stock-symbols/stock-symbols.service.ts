@@ -22,7 +22,7 @@ export class StockSymbolsService {
     private readonly httpService: HttpService,
     private readonly paginationService: PaginationService,
   ) {
-    this.apiKey = this.configService.get<string>('FINANCIAL_MODALING_PREP_API_KEY');
+    this.apiKey = this.configService.get<string>('FINANCIAL_MODELING_PREP_API_KEY');
   }
 
   async getSymbols(params: StockSymbolQueryParamsDto): Promise<StockSymbolPaginatedResponceDto> {
@@ -31,8 +31,9 @@ export class StockSymbolsService {
       .orderBy('symbol', params.order);
 
     if (params.query) {
+      const query = params.query.toUpperCase();
       queryBuilder.andWhere('stock-symbol.symbol LIKE :query', {
-        query: `%${params.query}%`,
+        query: `%${query}%`,
       });
     }
 
@@ -98,5 +99,13 @@ export class StockSymbolsService {
   async isTablePopulated(): Promise<boolean> {
     const count = await this.stockSymbolRepository.count();
     return count > 1000;
+  }
+
+  async getSpecificSymbol(symbolName: string): Promise<StockSymbol> {
+    return this.stockSymbolRepository.findOne({
+      where: {
+        symbol: symbolName,
+      },
+    });
   }
 }
