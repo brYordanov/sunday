@@ -4,7 +4,7 @@ import { StockSymbolsService } from './stock-symbols.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HttpModule } from '@nestjs/axios';
 import { StockSymbol } from './stock-symbol.entity';
-import { PaginationService } from '../../core/services/pagination.service';
+import { CoreModule } from '../core/core.module';
 
 @Module({
   imports: [
@@ -12,9 +12,10 @@ import { PaginationService } from '../../core/services/pagination.service';
     HttpModule.register({
       baseURL: 'https://financialmodelingprep.com/',
     }),
+    CoreModule,
   ],
   controllers: [StockSymbolsController],
-  providers: [StockSymbolsService, PaginationService],
+  providers: [StockSymbolsService],
   exports: [StockSymbolsService],
 })
 export class StockSymbolsModule {}
