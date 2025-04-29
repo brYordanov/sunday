@@ -38,14 +38,14 @@ body {
 :root {
   --border-radius-primary: 20px;
   --border-radius-secondary: 0;
-
-  --breakpoint-smallest: 0;
-  --breakpoint-sm: 768px;
-  --breakpoint-md: 1024px;
-  --breakpoint-lg: 1200px;
-  --breakpoint-xl: 1400px;
-  --breakpoint-xxl: 1600px;
 }
+
+$breakpoint-smallest: 0;
+$breakpoint-sm: 768px;
+$breakpoint-md: 1024px;
+$breakpoint-lg: 1200px;
+$breakpoint-xl: 1400px;
+$breakpoint-xxl: 1600px;
 
 .success-snackbar {
   .mat-mdc-snackbar-surface {
@@ -65,4 +65,29 @@ body {
   width: 100%;
   color: var(--color-text-muted);
   font-size: 14px;
+}
+
+.desktop-only {
+  display: none !important;
+  @media (min-width: $breakpoint-sm) {
+    display: flex !important;
+  }
+}
+
+.desktop-only-table-column {
+  @media (max-width: $breakpoint-sm) {
+    display: none !important;
+  }
+}
+
+.mobile-only {
+  display: flex;
+
+  @media (min-width: $breakpoint-sm) {
+    display: none !important;
+  }
+}
+
+body {
+  background-color: var(--color-accent-secondary);
 }

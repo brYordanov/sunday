@@ -36,6 +36,7 @@ export class CrListPageComponent {
       name: 'oldestRecordDate',
       title: 'Oldest Record Date',
       type: 'Date',
+      desktopOnly: true,
     },
     {
       name: 'createdAt',

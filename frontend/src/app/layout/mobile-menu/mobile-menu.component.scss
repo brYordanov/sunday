@@ -1,0 +1,48 @@
+.navigation {
+  position: fixed;
+  top: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  max-width: 200px;
+  width: 100%;
+  height: 100%;
+  padding-top: 250px;
+  font-size: 18px;
+  border: 0;
+  background-color: transparent;
+  z-index: 1;
+}
+
+.link-list {
+  list-style: none;
+
+  li {
+    padding: 10px;
+    text-align: center;
+  }
+}
+
+.link {
+  color: var(--color-background);
+  text-decoration: none;
+}
+
+.close-bnt {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 100px;
+  height: 100px;
+  color: var(--color-background);
+  background-color: transparent;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+
+  mat-icon {
+    font-size: 40px;
+    height: 40px;
+    width: 40px;
+  }
+}
