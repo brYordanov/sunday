@@ -10,19 +10,19 @@ export class RegisterCounterService {
     'storage/registerMethodsCallCount.json',
   );
 
-  async incrementCounter(key: string): Promise<void> {
+  async incrementCounter(key: CounterKey): Promise<void> {
     const counters = await this.readCounters();
     counters[key] = (counters[key] || 0) + 1;
     await this.writeCounters(counters);
   }
 
-  async resetCounter(key: string): Promise<void> {
+  async resetCounter(key: CounterKey): Promise<void> {
     const counters = await this.readCounters();
     counters[key] = 0;
     await this.writeCounters(counters);
   }
 
-  async getCounter(key: string): Promise<number> {
+  async getCounter(key: CounterKey): Promise<number> {
     const counters = await this.readCounters();
     return counters[key] || 0;
   }
@@ -48,3 +48,11 @@ export class RegisterCounterService {
     }
   }
 }
+
+export const CounterKeyEnum = {
+  STOCK: 'stock',
+  CRYPTO: 'crypto',
+  ETF: 'etf',
+} as const;
+
+export type CounterKey = (typeof CounterKeyEnum)[keyof typeof CounterKeyEnum];

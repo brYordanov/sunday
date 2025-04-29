@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Cron, SchedulerRegistry } from '@nestjs/schedule';
 import * as fs from 'fs';
 import path from 'path';
-import { RegisterCounterService } from 'src/modules/core/register-counter.service';
+import { CounterKeyEnum, RegisterCounterService } from 'src/modules/core/register-counter.service';
 import { StocksService } from 'src/modules/stocks/stocks.service';
 
 @Injectable()
@@ -42,7 +42,18 @@ export class SchedulerService {
 
       // should be 10-20
       const batchSize = 100;
-      const stockSymbols = symbols.slice(progressIndex, progressIndex + batchSize);
+      const dailyRequestCounter = await this.registerCounterService.getCounter(
+        CounterKeyEnum.STOCK,
+      );
+      if (dailyRequestCounter >= 20) {
+        this.logger.error('Daily request limit reached');
+        return;
+      }
+
+      const stockSymbols = symbols.slice(
+        progressIndex,
+        progressIndex + batchSize - dailyRequestCounter,
+      );
 
       let newIndex = progressIndex + batchSize;
       if (newIndex >= symbols.length) {
@@ -62,9 +73,9 @@ export class SchedulerService {
     }
   }
 
-  @Cron('30 21 * * *', { name: 'resetCountersDaily' })
+  @Cron('35 21 * * *', { name: 'resetCountersDaily' })
   async resetCountersDaily() {
-    await this.registerCounterService.resetCounter('stockProcessCalls');
-    await this.registerCounterService.resetCounter('processDailyStocksCronCalls');
+    await this.registerCounterService.resetCounter(CounterKeyEnum.STOCK);
+    await this.registerCounterService.resetCounter(CounterKeyEnum.CRYPTO);
   }
 }

@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, Repository } from 'typeorm';
@@ -13,6 +13,7 @@ import {
   RegisterCryptoBodyDto,
 } from '@sunday/validations';
 import { CryptoSymbolsService } from '../crypto-symbols/crypto-symbols.service';
+import { CounterKeyEnum, RegisterCounterService } from '../core/register-counter.service';
 
 @Injectable()
 export class CryptoService {
@@ -23,7 +24,8 @@ export class CryptoService {
     private readonly httpService: HttpService,
     private readonly cacheService: CacheService,
     private readonly cryptoSymbolService: CryptoSymbolsService,
-    private configService: ConfigService,
+    private readonly configService: ConfigService,
+    private readonly counterService: RegisterCounterService,
   ) {
     this.apiKey = this.configService.get<string>('COIN_DESK_API_KEY');
   }
@@ -61,6 +63,9 @@ export class CryptoService {
   }
 
   async getDataFromExternalApi(symbol: string): Promise<any> {
+    const dailyRequestCount = await this.counterService.getCounter(CounterKeyEnum.CRYPTO);
+    if (dailyRequestCount >= 20) throw new BadRequestException('Daily request limit reached');
+    await this.counterService.incrementCounter(CounterKeyEnum.CRYPTO);
     const response = await this.httpService.axiosRef.get(
       `https://data-api.coindesk.com/index/cc/v1/historical/days?market=cadli&instrument=${symbol.toUpperCase()}-USD&limit=5000&aggregate=1&fill=true&apply_mapping=true&response_format=JSON`,
     );
