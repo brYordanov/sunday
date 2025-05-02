@@ -3,4 +3,5 @@ export type Column = {
   title: string;
   type?: 'Date' | 'Link';
   linkPath?: string;
+  desktopOnly?: boolean;
 };

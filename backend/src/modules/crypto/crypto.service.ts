@@ -17,18 +17,14 @@ import { CounterKeyEnum, RegisterCounterService } from '../core/register-counter
 
 @Injectable()
 export class CryptoService {
-  private readonly apiKey: string;
   constructor(
     @InjectRepository(Crypto)
     private readonly cryptoRepository: Repository<Crypto>,
     private readonly httpService: HttpService,
     private readonly cacheService: CacheService,
     private readonly cryptoSymbolService: CryptoSymbolsService,
-    private readonly configService: ConfigService,
     private readonly counterService: RegisterCounterService,
-  ) {
-    this.apiKey = this.configService.get<string>('COIN_DESK_API_KEY');
-  }
+  ) {}
 
   async registerCrypto(symbol: string): Promise<Crypto> {
     const existingRecord = await this.cryptoRepository.findOneBy(<FindOptionsWhere<Crypto>>{
