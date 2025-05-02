@@ -1,6 +1,6 @@
-<div class="app-container">
+<div class="app-container" [class.mobile-menu-open]="isMobileMenuOpen$ | async">
   <app-header></app-header>
-  <app-container>
+  <app-container class="main">
     <router-outlet />
   </app-container>
 </div>

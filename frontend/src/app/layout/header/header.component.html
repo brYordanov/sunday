@@ -6,7 +6,7 @@
         <img width="132" height="40" src="logo-dark.png" alt="sunday" class="dark-theme-only" />
       </a>
       <div class="content">
-        <nav class="navigation desktop-only">
+        <nav class="navigation">
           <ul class="link-list">
             <li><a [routerLink]="['/stocks']" class="link">Stocks</a></li>
             <li><a [routerLink]="['/etfs']" class="link">ETFs</a></li>
@@ -14,7 +14,12 @@
           </ul>
         </nav>
         <app-light-switch-btn></app-light-switch-btn>
-        <button class="mobile-nav-btn">
+        <button
+          class="mobile-nav-btn"
+          matRipple
+          [matRippleColor]="rippleColor"
+          (click)="openMobileMenu()"
+        >
           <mat-icon>menu</mat-icon>
         </button>
       </div>
