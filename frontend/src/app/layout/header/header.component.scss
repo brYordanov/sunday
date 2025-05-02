@@ -1,6 +1,7 @@
 @use '../../../styles/variables.scss' as *;
 
 .header {
+  margin-left: -1px;
   padding: 10px 0;
   background-color: var(--color-accent-secondary);
   transition: background-color 0.3s ease, color 0.3s ease;
