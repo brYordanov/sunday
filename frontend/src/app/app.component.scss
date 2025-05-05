@@ -1,0 +1,15 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: transform 0.3s ease-in-out;
+
+  &.mobile-menu-open {
+    transform: scale(0.8) translate(-200px);
+  }
+}
+.main {
+  display: block;
+  flex: 1;
+  background-color: var(--color-background);
+}

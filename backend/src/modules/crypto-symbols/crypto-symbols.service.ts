@@ -9,7 +9,7 @@ import {
   CryptoSymbolQueryParamsDto,
   PopulateCryptoSymbolsResponseDto,
 } from '@sunday/validations';
-import { PaginationService } from 'src/core/services/pagination.service';
+import { PaginationService } from '../../modules/core/pagination.service';
 
 @Injectable()
 export class CryptoSymbolsService {

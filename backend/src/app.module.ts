@@ -10,6 +10,7 @@ import { CacheModule } from './modules/cache/cache.module';
 import { StockSymbolsModule } from './modules/stock-symbols/stock-symbols.module';
 import { CryptoModule } from './modules/crypto/crypto.module';
 import { CryptoSymbolsModule } from './modules/crypto-symbols/crypto-symbols.module';
+import { CoreModule } from './modules/core/core.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { CryptoSymbolsModule } from './modules/crypto-symbols/crypto-symbols.mod
     StockSymbolsModule,
     CryptoModule,
     CryptoSymbolsModule,
+    CoreModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,3 +1,5 @@
+@use '../../../../styles/variables.scss' as *;
+
 .form {
   position: relative;
 }
@@ -12,5 +14,10 @@
   button {
     border-radius: 0;
     height: 100%;
+    max-width: 130px;
+
+    @media (min-width: $breakpoint-sm) {
+      max-width: unset;
+    }
   }
 }

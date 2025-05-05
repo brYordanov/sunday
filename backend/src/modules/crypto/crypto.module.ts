@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { Crypto } from './crypto.entity';
 import { CacheModule } from '../cache/cache.module';
 import { CryptoSymbolsModule } from '../crypto-symbols/crypto-symbols.module';
+import { CoreModule } from '../core/core.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { CryptoSymbolsModule } from '../crypto-symbols/crypto-symbols.module';
     ConfigModule.forRoot(),
     CacheModule,
     CryptoSymbolsModule,
+    CoreModule,
   ],
   controllers: [CryptoController],
   providers: [CryptoService],

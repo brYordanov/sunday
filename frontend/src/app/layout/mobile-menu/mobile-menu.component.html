@@ -1,0 +1,16 @@
+<nav class="navigation" [class.active]="isActive$ | async">
+  <button
+    type="button"
+    class="close-bnt"
+    matRipple
+    [matRippleColor]="rippleColor"
+    (click)="closeMenu()"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+  <ul class="link-list">
+    <li><a [routerLink]="['/stocks']" class="link">Stocks</a></li>
+    <li><a [routerLink]="['/etfs']" class="link">ETFs</a></li>
+    <li><a [routerLink]="['/crypto']" class="link">Crypto</a></li>
+  </ul>
+</nav>

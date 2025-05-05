@@ -8,8 +8,8 @@ import { StocksController } from './stocks.controller';
 import { StocksService } from './stocks.service';
 import { CacheModule } from 'src/modules/cache/cache.module';
 import { Stock } from './stock.entity';
-import { SchedulerService } from 'src/services/scheduler.service';
 import { StockSymbolsModule } from '../stock-symbols/stock-symbols.module';
+import { CoreModule } from '../core/core.module';
 
 @Module({
   imports: [
@@ -21,8 +21,10 @@ import { StockSymbolsModule } from '../stock-symbols/stock-symbols.module';
     ConfigModule.forRoot(),
     CacheModule,
     StockSymbolsModule,
+    CoreModule,
   ],
   controllers: [StocksController],
-  providers: [StocksService, SchedulerService],
+  providers: [StocksService],
+  exports: [StocksService],
 })
 export class StocksModule {}

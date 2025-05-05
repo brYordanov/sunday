@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Query } from '@nestjs/common';
 import { CryptoSymbolsService } from './crypto-symbols.service';
-import { ValidateQuery, ValidateResponse } from 'src/core/decorators/validation';
+import { ValidateQuery, ValidateResponse } from '../../core/decorators/validation';
 import {
   CryptoSymbolPaginatedResponceSchema,
   CryptoSymbolQueryParamsDto,

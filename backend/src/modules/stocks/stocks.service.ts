@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
-import { CacheService } from 'src/modules/cache/cache.service';
+import { CacheService } from '../cache/cache.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Stock } from './stock.entity';
 import { Repository } from 'typeorm';
@@ -15,6 +15,7 @@ import {
   StockSymbolSchema,
 } from '@sunday/validations';
 import { StockSymbolsService } from '../stock-symbols/stock-symbols.service';
+import { CounterKeyEnum, RegisterCounterService } from '../core/register-counter.service';
 
 @Injectable()
 export class StocksService {
@@ -25,7 +26,8 @@ export class StocksService {
     private readonly httpService: HttpService,
     private readonly cacheService: CacheService,
     private readonly stockSymbolService: StockSymbolsService,
-    private configService: ConfigService,
+    private readonly configService: ConfigService,
+    private readonly counterService: RegisterCounterService,
   ) {
     this.apiKey = this.configService.get<string>('ALPHA_VANTAGE_API_KEY');
   }
@@ -53,6 +55,9 @@ export class StocksService {
   }
 
   async getDataFromExternalApi(symbol: string): Promise<any> {
+    const currentDayUseCounter = await this.counterService.getCounter(CounterKeyEnum.STOCK);
+    if (currentDayUseCounter >= 20) throw new BadRequestException('Daily request limit reached');
+    await this.counterService.incrementCounter(CounterKeyEnum.STOCK);
     const response = await this.httpService.axiosRef.get(
       `https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=${symbol}&apikey=${this.apiKey}`,
     );
