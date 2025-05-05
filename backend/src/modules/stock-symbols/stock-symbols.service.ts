@@ -10,7 +10,7 @@ import {
   StockSymbolQueryParamsDto,
   StockSymbolResponceDto,
 } from '@sunday/validations';
-import { PaginationService } from 'src/modules/core/pagination.service';
+import { PaginationService } from '../core/pagination.service';
 
 @Injectable()
 export class StockSymbolsService {

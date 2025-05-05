@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { Crypto } from './crypto.entity';
 import { CryptoService } from './crypto.service';
-import { ValidateBody, ValidateQuery, ValidateResponse } from 'src/core/decorators/validation';
+import { ValidateBody, ValidateQuery, ValidateResponse } from '../../core/decorators/validation';
 import {
   GetCryptoQueryParamsSchema,
   CryptoSchema,

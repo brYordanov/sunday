@@ -7,7 +7,7 @@ import {
 } from '@sunday/validations';
 
 import { StockSymbolsService } from './stock-symbols.service';
-import { ValidateQuery, ValidateResponse } from 'src/core/decorators/validation';
+import { ValidateQuery, ValidateResponse } from '../../core/decorators/validation';
 
 @Controller('stock-symbols')
 export class StockSymbolsController {

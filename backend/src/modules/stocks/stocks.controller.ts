@@ -10,7 +10,7 @@ import {
   DetailedStockInfoSchema,
   DetailedStockInfoDto,
 } from '@sunday/validations';
-import { ValidateBody, ValidateQuery, ValidateResponse } from 'src/core/decorators/validation';
+import { ValidateBody, ValidateQuery, ValidateResponse } from '../../core/decorators/validation';
 
 @Controller('stocks')
 export class StocksController {

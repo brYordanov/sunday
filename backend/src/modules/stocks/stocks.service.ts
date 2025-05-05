@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { BadRequestException, Injectable } from '@nestjs/common';
 
-import { CacheService } from 'src/modules/cache/cache.service';
+import { CacheService } from '../cache/cache.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Stock } from './stock.entity';
 import { Repository } from 'typeorm';
