@@ -8,7 +8,13 @@
     [options]="options$ | async"
   ></app-search-bar>
   <div class="btn-container">
-    <button mat-flat-button color="primary" type="submit" [disabled]="cryptoRegisterForm.invalid">
+    <button
+      mat-flat-button
+      class="submit-btn"
+      color="primary"
+      type="submit"
+      [disabled]="cryptoRegisterForm.invalid"
+    >
       Add to watch list
     </button>
     <app-loader *ngIf="isLoading" [type]="'overlay'"></app-loader>
