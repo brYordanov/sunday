@@ -6,6 +6,7 @@ import { HttpService } from '@nestjs/axios';
 import { CacheService } from '../cache/cache.service';
 import { CryptoSymbolsService } from '../crypto-symbols/crypto-symbols.service';
 import { RegisterCounterService } from '../core/register-counter.service';
+import { BadRequestException } from '@nestjs/common';
 
 describe('CryptoService', () => {
   let service: CryptoService;
@@ -84,6 +85,7 @@ describe('CryptoService', () => {
     const result = await service.registerCrypto('BTC');
 
     expect(mockCacheService.getCachedData).toHaveBeenCalledWith('BTC');
+    expect(mockHttpService.axiosRef.get).not.toHaveBeenCalled();
     expect(result).toEqual({ symbol: 'BTC', id: 2 });
   });
 
@@ -111,5 +113,35 @@ describe('CryptoService', () => {
     expect(mockHttpService.axiosRef.get).toHaveBeenCalled();
     expect(mockCacheService.setCachedData).toHaveBeenCalledWith('BTC', expect.any(String));
     expect(result).toEqual({ id: 3, symbol: 'BTC' });
+  });
+
+  it('should throw an error when API request limit is reached', async () => {
+    mockRepo.findOneBy.mockResolvedValue(null);
+    mockCacheService.getCachedData.mockResolvedValue(null);
+
+    mockCounterService.getCounter.mockResolvedValue(20);
+
+    await expect(service.registerCrypto('BTC')).rejects.toThrow(BadRequestException);
+
+    expect(mockCounterService.getCounter).toHaveBeenCalled();
+    expect(mockHttpService.axiosRef.get).not.toHaveBeenCalled();
+  });
+
+  it('should return an error when API responce is empty', async () => {
+    mockRepo.findOneBy.mockResolvedValue(null);
+    mockCacheService.getCachedData.mockResolvedValue(null);
+
+    mockCounterService.getCounter.mockResolvedValue(0);
+
+    const rawApiData = {
+      Data: [],
+    };
+
+    mockHttpService.axiosRef.get.mockResolvedValue({ data: rawApiData });
+
+    await expect(service.registerCrypto('BTC')).rejects.toThrow(BadRequestException);
+
+    expect(mockCounterService.getCounter).toHaveBeenCalled();
+    expect(mockHttpService.axiosRef.get).toHaveBeenCalled();
   });
 });

@@ -6,7 +6,7 @@ export const CryptoSchema = z.object({
   symbol: z.string(),
   oldestRecordDate: z.string(),
   newestRecordDate: z.string(),
-  createdAt: z.date().transform((date) => date.toISOString().split('T')[0]),
+  createdAt: z.coerce.date().transform((date) => date.toISOString().split('T')[0]),
 });
 export type CryptoDto = z.infer<typeof CryptoSchema>;
 

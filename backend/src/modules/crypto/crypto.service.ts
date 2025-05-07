@@ -64,6 +64,8 @@ export class CryptoService {
     const response = await this.httpService.axiosRef.get(
       `https://data-api.coindesk.com/index/cc/v1/historical/days?market=cadli&instrument=${symbol.toUpperCase()}-USD&limit=5000&aggregate=1&fill=true&apply_mapping=true&response_format=JSON`,
     );
+    if (response.data['Data'].length === 0) throw new BadRequestException('No data availiable');
+
     return response.data;
   }
 
