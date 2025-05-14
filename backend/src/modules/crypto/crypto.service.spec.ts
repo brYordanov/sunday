@@ -7,6 +7,11 @@ import { CacheService } from '../cache/cache.service';
 import { CryptoSymbolsService } from '../crypto-symbols/crypto-symbols.service';
 import { RegisterCounterService } from '../core/register-counter.service';
 import { BadRequestException } from '@nestjs/common';
+import {
+  mockAnalysedData,
+  mockCachedData,
+  mockSymbolData,
+} from '../../test-utils/mock-crypto-data';
 
 describe('CryptoService', () => {
   let service: CryptoService;
@@ -15,6 +20,7 @@ describe('CryptoService', () => {
     findOneBy: jest.fn(),
     create: jest.fn(),
     save: jest.fn(),
+    findOne: jest.fn(),
   };
 
   const mockCacheService = {
@@ -143,5 +149,29 @@ describe('CryptoService', () => {
 
     expect(mockCounterService.getCounter).toHaveBeenCalled();
     expect(mockHttpService.axiosRef.get).toHaveBeenCalled();
+  });
+
+  it('should return detailed crypto info from DB, symbol service, and cache', async () => {
+    const symbol = 'BTC';
+    const params = { symbol };
+
+    mockRepo.findOne.mockResolvedValue(mockAnalysedData);
+    mockSymbolService.getSpecificSymbol.mockResolvedValue(mockSymbolData);
+    mockCacheService.getCachedData.mockResolvedValue(mockCachedData);
+
+    const result = await service.getDetailedInfo(params);
+
+    expect(result).toEqual({
+      analysedData: expect.any(Object),
+      cryptoSymbolData: expect.any(Object),
+      cachedData: JSON.parse(mockCachedData),
+    });
+
+    expect(result.analysedData.symbol).toBe('BTC');
+    expect(result.cryptoSymbolData.name).toBe('Bitcoin');
+
+    expect(mockRepo.findOne).toHaveBeenCalledWith({ where: { symbol } });
+    expect(mockSymbolService.getSpecificSymbol).toHaveBeenCalledWith(symbol);
+    expect(mockCacheService.getCachedData).toHaveBeenCalledWith(symbol);
   });
 });
