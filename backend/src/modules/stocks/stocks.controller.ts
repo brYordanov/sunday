@@ -24,7 +24,7 @@ export class StocksController {
   }
 
   @Get('detailed')
-  // @ValidateResponse(DetailedStockInfoSchema)
+  @ValidateResponse(DetailedStockInfoSchema)
   @ValidateQuery(StockSymbolPropertySchema)
   async getDetailedStockInfo(
     @Query() params: StockSymbolPropertyDto,
