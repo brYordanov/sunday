@@ -3,7 +3,15 @@ export const mockAnalysedData = {
   symbol: 'BTC',
   oldestRecordDate: '2023-01-01',
   newestRecordDate: '2024-01-01',
-  createdAt: '2023-01-01T00:00:00Z',
+  createdAt: new Date('2024-01-01T00:00:00Z'),
+};
+
+export const mockCryptoData = {
+  id: 1,
+  symbol: 'BTC',
+  createdAt: new Date(),
+  oldestRecordDate: new Date('2020-01-01'),
+  newestRecordDate: new Date('2024-01-01'),
 };
 
 export const mockSymbolData = {
