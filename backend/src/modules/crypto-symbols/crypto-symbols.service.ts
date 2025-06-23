@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CryptoSymbol } from './crypto-symbols.entity';
 import { Repository } from 'typeorm';
 import { HttpService } from '@nestjs/axios';
-import { ExternalApiCryptoSymbolDto } from './crypto-symbol.types';
+import { ExternalApiCryptoSymbolDto } from './crypto-symbols.types';
 import {
   CryptoSymbolPaginatedResponceDto,
   CryptoSymbolQueryParamsDto,
