@@ -12,3 +12,13 @@ export const createMockHttpService = () => ({
     get: jest.fn(),
   },
 });
+
+export const createMockQueryBuilder = () => {
+  const qb: any = {
+    andWhere: jest.fn().mockReturnThis(),
+    orderBy: jest.fn().mockReturnThis(),
+    getMany: jest.fn().mockResolvedValue([]),
+  };
+
+  return qb;
+};
