@@ -3,6 +3,14 @@ export const mockStockData = {
   symbol: 'AAPL',
   oldestRecordDate: '2020-01-01',
   newestRecordDate: '2024-01-01',
+  createdAt: new Date('2024-01-01'),
+};
+
+export const mockStockDto = {
+  id: 1,
+  symbol: 'AAPL',
+  oldestRecordDate: '2020-01-01',
+  newestRecordDate: '2024-01-01',
   createdAt: '2024-01-01',
 };
 
