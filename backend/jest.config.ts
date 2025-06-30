@@ -19,6 +19,7 @@ const config: Config = {
     '.*\\.module\\.ts$',
     '.*\\.types\\.ts$',
     'typeorm.config.ts',
+    'src/test-utils/',
   ],
 };
 
