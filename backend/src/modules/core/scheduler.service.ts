@@ -41,7 +41,7 @@ export class SchedulerService {
       }
 
       // should be 10-20
-      const batchSize = 100;
+      const batchSize = 10;
       const dailyRequestCounter = await this.registerCounterService.getCounter(
         CounterKeyEnum.STOCK,
       );
