@@ -6,7 +6,7 @@ import {
   DetailedCryptoInfoDto,
 } from '@sunday/validations';
 import { BehaviorSubject, Observable, shareReplay, switchMap } from 'rxjs';
-import { API_URL } from '../../../../env';
+import { ENV } from '../../../../environments/environment';
 import { CryptoQueryParams, registerCryptoPayload } from './crypto.types';
 
 @Injectable({ providedIn: 'root' })
@@ -16,7 +16,7 @@ export class CryptoService {
   private refresh$ = new BehaviorSubject<string | undefined>(undefined);
 
   cryptos$ = this.refresh$.pipe(
-    switchMap((query) => this.http.get<CryptoDto[]>(`${API_URL}/crypto?${query}`)),
+    switchMap((query) => this.http.get<CryptoDto[]>(`${ENV.apiUrl}/crypto?${query}`)),
     shareReplay(),
   );
 
@@ -26,18 +26,18 @@ export class CryptoService {
   }
 
   registerCrypto(payload: registerCryptoPayload): Observable<CryptoDto> {
-    return this.http.post<any>(`${API_URL}/crypto`, payload);
+    return this.http.post<any>(`${ENV.apiUrl}/crypto`, payload);
   }
 
   getStockSymbols(query: string): Observable<CryptoSymbolPaginatedResponceDto> {
     return this.http.get<CryptoSymbolPaginatedResponceDto>(
-      `${API_URL}/crypto-symbols?query=${query}`,
+      `${ENV.apiUrl}/crypto-symbols?query=${query}`,
     );
   }
 
   getDetailedCryptoInfo(cryptoSymbol: string): Observable<DetailedCryptoInfoDto> {
     return this.http.get<DetailedCryptoInfoDto>(
-      `${API_URL}/crypto/detailed?symbol=${cryptoSymbol}`,
+      `${ENV.apiUrl}/crypto/detailed?symbol=${cryptoSymbol}`,
     );
   }
 

@@ -18,6 +18,3 @@ COPY libs/validations/. ../libs/validations/
 
 # Expose the backend port
 EXPOSE 4321
-
-# Start the backend
-CMD ["npm", "run", "start"]

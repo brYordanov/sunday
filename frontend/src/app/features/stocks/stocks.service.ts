@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, shareReplay, switchMap } from 'rxjs';
-import { API_URL } from '../../../../env';
+import { ENV } from '../../../../environments/environment';
 import { registerStockPayload, StockQueryParams } from './stocks.types';
 import {
   DetailedStockInfoDto,
@@ -18,12 +18,12 @@ export class StockService {
   private refresh$ = new BehaviorSubject<string | undefined>(undefined);
 
   stocks$ = this.refresh$.pipe(
-    switchMap((query) => this.http.get<StockDto[]>(`${API_URL}/stocks?${query}`)),
+    switchMap((query) => this.http.get<StockDto[]>(`${ENV.apiUrl}/stocks?${query}`)),
     shareReplay(),
   );
 
   registerStock(payload: registerStockPayload): Observable<StockDto> {
-    return this.http.post<any>(`${API_URL}/stocks`, payload);
+    return this.http.post<any>(`${ENV.apiUrl}/stocks`, payload);
   }
 
   refreshStocks(formValue?: StockQueryParams) {
@@ -32,12 +32,14 @@ export class StockService {
   }
 
   getDetailedStockInfo(stockSymbol: string): Observable<DetailedStockInfoDto> {
-    return this.http.get<DetailedStockInfoDto>(`${API_URL}/stocks/detailed?symbol=${stockSymbol}`);
+    return this.http.get<DetailedStockInfoDto>(
+      `${ENV.apiUrl}/stocks/detailed?symbol=${stockSymbol}`,
+    );
   }
 
   getStockSymbols(query: string): Observable<StockSymbolPaginatedResponceDto> {
     return this.http.get<StockSymbolPaginatedResponceDto>(
-      `${API_URL}/stock-symbols?query=${query}`,
+      `${ENV.apiUrl}/stock-symbols?query=${query}`,
     );
   }
 

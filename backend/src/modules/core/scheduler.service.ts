@@ -18,7 +18,8 @@ export class SchedulerService {
 
   // '30 21 * * *' --- everyday at 21:30
   // '0/5 * * * * *' --- every 5 seconds
-  @Cron('0/5 * * * * *', { name: 'processDailyStocks' })
+  // @Cron('0/5 * * * * *', { name: 'processDailyStocks' })
+  @Cron('30 21 * * *', { name: 'processDailyStocks' })
   async processDailyStocks() {
     try {
       const doesFileExits = fs.existsSync(this.stockSymbolsFilePath);
