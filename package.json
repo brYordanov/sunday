@@ -5,15 +5,17 @@
   "main": "index.js",
   "scripts": {
     "start:be-local": "concurrently 'docker-compose --env-file ./backend/.env.local -f docker-compose.local.yaml up --build' 'cd backend && npm run start:dev'",
-    "start:be-docker": "docker-compose --env-file ./backend/.env.docker -f docker-compose.yaml up --build",
+    "start:be-prod": "docker-compose --env-file ./backend/.env.docker -f docker-compose.yaml up --build",
     "start:db": "docker-compose --env-file ./backend/.env.local -f docker-compose.local.yaml up --build",
     "start:nest": "cd backend && npm run start:dev",
     "start:fe": "cd frontend && npx ng serve",
-    "start:fe-ssr": "cd frontend && npm run dev:ssr",
+    "start:fe-ssr-dev": "cd frontend && npm run dev:ssr",
+    "start:fe-prod": "cd frontend && npm run start:prod",
     "start:all": "concurrently 'npm run start:be-docker' 'npm run start:frontend'",
     "lint": "eslint **/*.ts",
     "format": "prettier --write **/*.{ts,html,scss}",
-    "update:validations": "cd libs/validations && rm -rf dist && npx tsc"
+    "update:validations": "cd libs/validations && rm -rf dist && npx tsc",
+    "deploy:prod": "npm run start:be-prod && npm run start:fe-prod && sudo systemctl start cloudflared"
   },
   "repository": {
     "type": "git",

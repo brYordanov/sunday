@@ -1,19 +1,19 @@
 version: '3.8'
 
-services:  
+services:
   postgres:
     image: postgres:15
     container_name: sunday_postgres
-    restart: always  # Restart if it crashes
+    restart: always # Restart if it crashes
     environment:
       NODE_ENV: local
       POSTGRES_USER: dev
       POSTGRES_PASSWORD: 123
       POSTGRES_DB: postgre
     ports:
-      - "5434:5432"  # Map host's port 5434 to container's port 5432
+      - '5434:5432' # Map host's port 5434 to container's port 5432
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data_local:/var/lib/postgresql/data
 
 volumes:
-  postgres_data:  # Define a volume to persist PostgreSQL data
+  postgres_data_local: # Define a volume to persist PostgreSQL data

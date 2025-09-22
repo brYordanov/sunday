@@ -5,10 +5,12 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:prod": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:frontend": "node dist/frontend/server/server.mjs",
-    "dev:ssr": "concurrently \"npm run watch\" \"nodemon --watch dist/frontend/server --watch dist/frontend/browser -e js,mjs,css,html --exec \\\"npm run serve:ssr:frontend\\\"\""
+    "serve:ssr:frontend": "PORT=4001 node dist/frontend/server/server.mjs",
+    "dev:ssr": "PORT=4000 concurrently \"npm run watch\" \"nodemon --watch dist/frontend/server --watch dist/frontend/browser -e js,mjs,css,html --exec \\\"npm run serve:ssr:frontend\\\"\"",
+    "start:prod": "npm run build:prod && npm run serve:ssr:frontend"
   },
   "private": true,
   "dependencies": {
