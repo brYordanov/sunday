@@ -6,19 +6,20 @@ import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.int
 import { ZodValidationInterceptor } from './core/interceptors/zod-validation.interceptor';
 import 'tsconfig-paths/register';
 
+dotenv.config({ path: process.env.NODE_ENV === 'production' ? '.env.docker' : '.env.local' });
+
 const isProd = process.env.NODE_ENV === 'production';
-const envFile = isProd ? '.env.docker' : '.env.local';
-const corsOrigin = isProd ? ['https://sunday-fe.bigtilt.org'] : '*';
-dotenv.config({ path: envFile });
+
+const ALLOWED_ORIGINS = isProd ? ['https://sunday-fe.bigtilt.org'] : '*';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const corsOptions: CorsOptions = {
-    origin: corsOrigin,
+    origin: ALLOWED_ORIGINS,
     // credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD', 'PATCH'],
   };
 
   app.useGlobalInterceptors(new ZodValidationInterceptor(new Reflector()));

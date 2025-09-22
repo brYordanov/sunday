@@ -14,7 +14,8 @@
     "start:all": "concurrently 'npm run start:be-docker' 'npm run start:frontend'",
     "lint": "eslint **/*.ts",
     "format": "prettier --write **/*.{ts,html,scss}",
-    "update:validations": "cd libs/validations && rm -rf dist && npx tsc"
+    "update:validations": "cd libs/validations && rm -rf dist && npx tsc",
+    "deploy:prod": "npm run start:be-prod && npm run start:fe-prod && sudo systemctl start cloudflared"
   },
   "repository": {
     "type": "git",

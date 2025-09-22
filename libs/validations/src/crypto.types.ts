@@ -8,7 +8,7 @@ export const CryptoSchema = z.object({
   newestRecordDate: z.string(),
   createdAt: z.coerce.date().transform((date) => date.toISOString().split('T')[0]),
 });
-export type CryptoDto = z.infer<typeof CryptoSchema>;
+export type CryptoDto = z.output<typeof CryptoSchema>;
 
 export const RegisterCryptoBodySchema = z.object({
   symbol: z.string().nonempty(),
