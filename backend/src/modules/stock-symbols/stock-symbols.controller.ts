@@ -24,6 +24,7 @@ export class StockSymbolsController {
 
   @Post('populate')
   async registerAllStockSymbols() {
+    return 'this EP was depricated';
     return this.stockSymbolSrvice.populateTable();
   }
 }

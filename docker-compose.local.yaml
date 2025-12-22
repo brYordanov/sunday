@@ -3,7 +3,7 @@ version: '3.8'
 services:
   postgres:
     image: postgres:15
-    container_name: sunday_postgres
+    container_name: sunday_postgres_local
     restart: always # Restart if it crashes
     environment:
       NODE_ENV: local

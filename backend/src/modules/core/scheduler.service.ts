@@ -42,7 +42,7 @@ export class SchedulerService {
       }
 
       // should be 10-20
-      const batchSize = 10;
+      const batchSize = 20;
       const dailyRequestCounter = await this.registerCounterService.getCounter(
         CounterKeyEnum.STOCK,
       );
@@ -56,7 +56,7 @@ export class SchedulerService {
         progressIndex + batchSize - dailyRequestCounter,
       );
 
-      let newIndex = progressIndex + batchSize;
+      let newIndex = progressIndex + batchSize - dailyRequestCounter;
       if (newIndex >= symbols.length) {
         this.logger.log('All stocks processed');
         this.schedulerRegistry.deleteCronJob('processDailyStocks');
@@ -68,7 +68,7 @@ export class SchedulerService {
 
       this.logger.log(`Processing stocks ${progressIndex} - ${progressIndex + batchSize}`);
 
-      //   await Promise.all(stockSymbols.map((symbol) => this.stocksService.processStock(symbol)));
+      await Promise.all(stockSymbols.map((symbol) => this.stocksService.processStock(symbol)));
     } catch (error) {
       this.logger.error('Error processing daily stocks', error);
     }

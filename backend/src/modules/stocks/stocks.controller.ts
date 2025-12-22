@@ -11,10 +11,14 @@ import {
   DetailedStockInfoDto,
 } from '@sunday/validations';
 import { ValidateBody, ValidateQuery, ValidateResponse } from '../../core/decorators/validation';
+import { SchedulerService } from '../core/scheduler.service';
 
 @Controller('stocks')
 export class StocksController {
-  constructor(private readonly stockService: StocksService) {}
+  constructor(
+    private readonly stockService: StocksService,
+    private readonly schedulerService: SchedulerService,
+  ) {}
 
   @Get()
   @ValidateQuery(GetStockQueryParamsSchema)
@@ -37,5 +41,10 @@ export class StocksController {
   @ValidateResponse(StockSchema)
   async registerStock(@Body() body: StockSymbolPropertyDto): Promise<Stock> {
     return this.stockService.processStock(body.symbol);
+  }
+
+  @Post('process-daily-stocks')
+  async processDailyStocks(): Promise<any> {
+    return this.schedulerService.processDailyStocks();
   }
 }
