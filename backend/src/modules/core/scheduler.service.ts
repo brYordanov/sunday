@@ -42,7 +42,7 @@ export class SchedulerService {
       }
 
       // should be 10-20
-      const batchSize = 20;
+      const batchSize = 10;
       const dailyRequestCounter = await this.registerCounterService.getCounter(
         CounterKeyEnum.STOCK,
       );
@@ -68,7 +68,19 @@ export class SchedulerService {
 
       this.logger.log(`Processing stocks ${progressIndex} - ${progressIndex + batchSize}`);
 
-      await Promise.all(stockSymbols.map((symbol) => this.stocksService.processStock(symbol)));
+      const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+      for (const symbol of stockSymbols) {
+        try {
+          await this.stocksService.processStock(symbol);
+          this.logger.log(`Processed ${symbol}`);
+        } catch (err) {
+          this.logger.error(`Failed ${symbol}`, err);
+        }
+
+        // Alpha Vantage: 1 req / 2sec → be safe
+        await sleep(2000);
+      }
     } catch (error) {
       this.logger.error('Error processing daily stocks', error);
     }

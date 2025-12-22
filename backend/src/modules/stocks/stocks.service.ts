@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 
 import { CacheService } from '../cache/cache.service';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -20,6 +20,7 @@ import { CounterKeyEnum, RegisterCounterService } from '../core/register-counter
 @Injectable()
 export class StocksService {
   private readonly apiKey: string;
+  private readonly logger = new Logger(StocksService.name);
   constructor(
     @InjectRepository(Stock)
     private readonly stockRepository: Repository<Stock>,
@@ -45,6 +46,7 @@ export class StocksService {
     }
 
     const stockRawData = await this.getDataFromExternalApi(stockSymbol);
+    await this.counterService.incrementCounter(CounterKeyEnum.STOCK);
     await this.cacheService.setCachedData(stockSymbol, JSON.stringify(stockRawData));
     return this.saveStock(stockRawData);
   }
@@ -57,11 +59,17 @@ export class StocksService {
   async getDataFromExternalApi(symbol: string): Promise<any> {
     const currentDayUseCounter = await this.counterService.getCounter(CounterKeyEnum.STOCK);
     if (currentDayUseCounter >= 20) throw new BadRequestException('Daily request limit reached');
-    await this.counterService.incrementCounter(CounterKeyEnum.STOCK);
     const response = await this.httpService.axiosRef.get(
       `https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=${symbol}&apikey=${this.apiKey}`,
     );
-    return response.data;
+    const data = response.data;
+    const hasTimeSeries = data && data['Monthly Time Series'];
+    const hasError = data?.Note || data?.['Error Message'];
+    if (!hasTimeSeries || hasError) {
+      this.logger.error(`Alpha Vantage error for ${symbol}: ${hasError || 'missing data'}`);
+      throw new BadRequestException('Failed to fetch stock data');
+    }
+    return data;
   }
 
   async getStock(params: GetStockQueryParamsDto): Promise<Stock[]> {
@@ -106,8 +114,16 @@ export class StocksService {
   }
 
   createBody(stockData) {
-    const dataPerMonth = stockData['Monthly Time Series'];
+    const dataPerMonth = stockData?.['Monthly Time Series'];
+    if (!dataPerMonth) {
+      this.logger.error('Missing Monthly Time Series data for stock');
+      throw new BadRequestException('No stock data returned from provider');
+    }
     const entries = Object.entries(dataPerMonth);
+    if (!entries.length) {
+      this.logger.error('Empty Monthly Time Series data for stock');
+      throw new BadRequestException('No stock data returned from provider');
+    }
     const [oldestRecordDate, oldestRecordValue] = entries[entries.length - 1];
     const [newestRecordDate, newestRecordValue] = entries[0];
     const symbol = stockData['Meta Data']['2. Symbol'];

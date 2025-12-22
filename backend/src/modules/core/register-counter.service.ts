@@ -29,10 +29,12 @@ export class RegisterCounterService {
 
   private async readCounters(): Promise<Record<string, number>> {
     try {
-      if (!fs.existsSync(this.counterFilePath)) {
-        await fs.promises.writeFile(this.counterFilePath, JSON.stringify({}));
-      }
+      await this.ensureCounterFile();
       const data = await fs.promises.readFile(this.counterFilePath, 'utf-8');
+      if (!data.trim()) {
+        await this.writeCounters({});
+        return {};
+      }
       return JSON.parse(data);
     } catch (error) {
       this.logger.error('Error reading counters file', error);
@@ -42,9 +44,19 @@ export class RegisterCounterService {
 
   private async writeCounters(counters: Record<string, number>): Promise<void> {
     try {
+      await this.ensureCounterFile();
       await fs.promises.writeFile(this.counterFilePath, JSON.stringify(counters, null, 2));
     } catch (error) {
       this.logger.error('Error writing counters file', error);
+    }
+  }
+
+  private async ensureCounterFile(): Promise<void> {
+    const dir = path.dirname(this.counterFilePath);
+    await fs.promises.mkdir(dir, { recursive: true });
+    const exists = fs.existsSync(this.counterFilePath);
+    if (!exists) {
+      await fs.promises.writeFile(this.counterFilePath, JSON.stringify({}));
     }
   }
 }
